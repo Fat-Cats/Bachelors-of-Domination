@@ -11,24 +11,24 @@ import sepr.game.utils.PlayerType;
 
 import java.util.HashMap;
 
-/**
+/*
  * executable http://www.riskydevelopments.co.uk/bod/BoD.zip
  *
  * main game class used for controlling what screen is currently being displayed
  */
 public class Main extends Game implements ApplicationListener {
+	//declare screens
 	private MiniGameScreen miniGameScreen;
 	private MenuScreen menuScreen;
 	private GameScreen gameScreen;
 	private OptionsScreen optionsScreen;
 	private GameSetupScreen gameSetupScreen;
+	//declar managers for save/load and audio handling
 	private SaveLoadManager saveLoadManager;
 	private AudioManager Audio = AudioManager.getInstance();
 
 
-	/**
-	 * Setup the screens and set the first screen as the menu
-	 */
+	// Setup the screens and set the first screen as the menu
 	@Override
 	public void create () {
 		new WidgetFactory(); // setup widget factory for generating UI components
