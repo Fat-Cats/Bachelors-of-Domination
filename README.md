@@ -1,5 +1,5 @@
 # Bachelors of Domination
-## A strategy game by Risky Developments and passed onto CRGames and passed onto Fat Cats
+## A strategy game by Risky Developments and passed onto CRGames and passed onto Fat Cats.
 
 ![alt text](https://www.cs.york.ac.uk/people/bigphotos/colin.jpeg)
 
