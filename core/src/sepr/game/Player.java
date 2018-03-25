@@ -1,7 +1,11 @@
 package sepr.game;
 
 import com.badlogic.gdx.graphics.Color;
+import sepr.game.playingCards.PlayingCard;
+import sepr.game.playingCards.PlayingCardManager;
 import sepr.game.utils.PlayerType;
+
+import java.util.ArrayList;
 
 /**
  * base class for storing Neutral and Human player data
@@ -14,6 +18,11 @@ public class Player {
     private Color sectorColour; // what colour to shade sectors owned by the player
     private PlayerType playerType; // Human or Neutral player
     private Boolean OwnsPVC;
+
+    //===============code by charlie===============
+    //each player is given a PlayingCardManager to keep track of their cards
+    public PlayingCardManager myCards;
+    //===============code by charlie===============
 
     /**
      * creates a player object with the specified properties
@@ -32,6 +41,13 @@ public class Player {
         this.playerType = playerType;
         this.playerName = playerName;
         this.OwnsPVC = false;
+
+        //===============code by charlie===============
+        //assign each player a new PlayingCardManager (which automatically generates 3 random cards)
+        myCards = new PlayingCardManager(this);
+        //===============code by charlie===============
+
+
     }
 
     public Player(int id, GameSetupScreen.CollegeName collegeName, Color sectorColour, PlayerType playerType, String playerName, int troopsToAllocate, boolean ownsPVC){

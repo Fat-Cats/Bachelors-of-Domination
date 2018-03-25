@@ -10,8 +10,11 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import sepr.game.playingCards.PlayingCard;
+import sepr.game.playingCards.PlayingCardManager;
 import sepr.game.utils.PlayerType;
 import sepr.game.utils.TurnPhaseType;
+import sepr.game.Phase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,6 +59,8 @@ public class GameScreen implements Screen, InputProcessor{
     private boolean gameSetup = false; // true once setupGame has been called
 
     private Random random;
+
+
 
     /**
      * sets up rendering objects and key input handling
@@ -115,15 +120,17 @@ public class GameScreen implements Screen, InputProcessor{
      * @param maxTurnTime time elapsed in cthis.phases = phases;urrent turn, irrelevant if turn timer not enabled
      */
     public void setupGame(HashMap<Integer, Player> players, boolean turnTimerEnabled, int maxTurnTime, boolean allocateNeutralPlayer) {
+
         Audio.loadSounds(); //loads the sounds into memory
+
         this.players = players;
+
         this.turnOrder = new ArrayList<Integer>();
         for (Integer i : players.keySet()) {
             if ((players.get(i).getPlayerType() != PlayerType.NEUTRAL_AI)) { // don't add the neutral player or unassigned to the turn order
                 this.turnOrder.add(i);
             }
         }
-
 
         this.currentPlayerPointer = 0; // set the current player to the player in the first position of the turnOrder list
 
@@ -141,6 +148,7 @@ public class GameScreen implements Screen, InputProcessor{
         // create the game phases and add them to the phases hashmap
         this.phases = new HashMap<TurnPhaseType, Phase>();
         this.phases.put(TurnPhaseType.REINFORCEMENT, new PhaseReinforce(this));
+        this.phases.put(TurnPhaseType.REINFORCEMENT, new PhaseReinforce(this));
         this.phases.put(TurnPhaseType.ATTACK, new PhaseAttack(this));
         this.phases.put(TurnPhaseType.MOVEMENT, new PhaseMovement(this));
     }
@@ -154,7 +162,7 @@ public class GameScreen implements Screen, InputProcessor{
         if (!gameSetup) {
             throw new RuntimeException("Cannot start game before it is setup");
         }
-        this.turnTimeStart = System.currentTimeMillis(); // set turn start time to current rime
+        this.turnTimeStart = System.currentTimeMillis(); // set turn start time to current time
         this.phases.get(currentPhase).enterPhase(getCurrentPlayer());
         resetCameraPosition();
     }
@@ -239,8 +247,6 @@ public class GameScreen implements Screen, InputProcessor{
     protected void nextPhase() {
         this.phases.get(currentPhase).endPhase();
 
-
-
         switch (currentPhase) {
             case REINFORCEMENT:
                 currentPhase = TurnPhaseType.ATTACK;
@@ -266,11 +272,20 @@ public class GameScreen implements Screen, InputProcessor{
      * increments the currentPlayerPointer and resets it to 0 if it now exceeds the number of players in the list
      */
     private void nextPlayer() {
+        //=============code by charlie==============
+        //at the end of each players turn, replenish their used cards
+        getCurrentPlayer().myCards.assignNewCards();
+        //=============code by charlie==============
+
         previousPlayerPointer = currentPlayerPointer;
         currentPlayerPointer++;
         if (currentPlayerPointer == turnOrder.size()) { // reached end of players, reset to 0 and increase turn number
             currentPlayerPointer = 0;
 
+        }
+
+        for (Phase itsJustAPhase : this.phases.values()) {
+            itsJustAPhase.setCardManager( getCurrentPlayer().myCards );
         }
 
         resetCameraPosition(); // re-centres the camera for the next player
@@ -460,6 +475,8 @@ public class GameScreen implements Screen, InputProcessor{
         if (this.turnTimerEnabled && (getTurnTimeRemaining() <= 0)) { // goto the next player's turn if the timer is enabled and they have run out of time
             nextPlayer();
         }
+
+
     }
 
     @Override

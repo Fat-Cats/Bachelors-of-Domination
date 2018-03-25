@@ -13,7 +13,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import org.lwjgl.Sys;
+import sepr.game.playingCards.PlayingCard;
+import sepr.game.playingCards.PlayingCardManager;
 import sepr.game.utils.TurnPhaseType;
+
+import java.util.ArrayList;
 
 /**
  * base class for handling phase specific input
@@ -38,8 +43,12 @@ public abstract class Phase extends Stage {
 
     private static Texture gameHUDBottomBarLeftPartTexture;
 
+    //=================code by charlie=================
+    //PlayingCardManager is drawn on every phase, but each phase this manager is set to the current player's manager
+    private PlayingCardManager myCards = new PlayingCardManager(null);
+    //=================code by charlie=================
+
     /**
-     *
      * @param gameScreen for accessing the map and additional game properties
      * @param turnPhase type of phase this is
      */
@@ -51,9 +60,9 @@ public abstract class Phase extends Stage {
         this.turnPhase = turnPhase;
 
         this.table = new Table();
+
         this.table.setFillParent(true); // make ui table fill the entire screen
         this.addActor(table);
-        this.table.setDebug(false); // enable table drawing for ui debug
 
         gameHUDBottomBarLeftPartTexture = new Texture("uiComponents/HUD-Bottom-Bar-Left-Part.png");
 
@@ -73,6 +82,7 @@ public abstract class Phase extends Stage {
 
             }
         });
+
         bottomBarRightPart = WidgetFactory.genGameHUDBottomBarRightPart("INIT");
         Table bottomBarLeftPart = genGameHUDBottomBarLeftPart();
 
@@ -85,16 +95,41 @@ public abstract class Phase extends Stage {
         Table subTable = new Table();
 
         subTable.bottom();
-        subTable.add(bottomBarLeftPart).height(190).width(250);
-        subTable.add(bottomBarRightPart).bottom().expandX().fillX().height(60);
+
+        subTable.add(bottomBarLeftPart).height(190).width(250).bottom();
+
+        //================code by charlie==============================
+        //create a new table so that the usual ui can be displayed below the newly added PlayingCardManager ui
+        Table subSubTable = new Table();
+        //set name of this table so it can be easily found and updated as the card manager changes
+        subSubTable.setName("bottomUITable");
+        //add the PlayingCardManager so it will be drawn above the usual bottom bar UI
+        subSubTable.add( myCards );
+        myCards.setStage(this); //set this as the stage for the PlayingCardManager
+        subSubTable.row();
+        subSubTable.add(bottomBarRightPart).expandX().fillX().height(60);
+        subTable.add(subSubTable).bottom().expandX().fillX();//.height(60);
+        //================code by charlie==============================
 
         table.row();
         table.add(subTable).expandX().fill();
         table.bottom().right();
-        table.add(endPhaseButton).fill().height(60).width(170);
+        table.add(endPhaseButton).fill().height(60).width(170).bottom();
 
         setBottomBarText(null);
     }
+
+    //================code by charlie==============================
+
+    //this is used to display a new PlayingCardManager (called at the beginning of each phase)
+    public void setCardManager(PlayingCardManager newCardManager) {
+        Table bottomUITable = (Table)this.getRoot().findActor("bottomUITable");
+        bottomUITable.getCells().get(0).setActor(newCardManager);
+        newCardManager.setStage(this);
+    }
+
+    //================code by charlie==============================
+
 
     /**
      * generates the UI widget to be displayed at the bottom left of the HUD
@@ -118,7 +153,6 @@ public abstract class Phase extends Stage {
         table.background(new TextureRegionDrawable(new TextureRegion(gameHUDBottomBarLeftPartTexture)));
 
         Table subTable = new Table();
-        subTable.setDebug(false);
         subTable.left().add(collegeLogo).height(80).width(100).pad(0);
         subTable.right().add(playerNameLabel).pad(0);
         subTable.row();
@@ -152,6 +186,10 @@ public abstract class Phase extends Stage {
     void enterPhase(Player player) {
         this.currentPlayer = player;
 
+        //==========code by charlie================
+        //at the beggining of every phase, draw the current players PlayingCardManager to the UI
+        setCardManager(currentPlayer.myCards);
+        //==========code by charlie================
 
         playerNameStyle.fontColor = GameSetupScreen.getCollegeColor(currentPlayer.getCollegeName()); // update colour of player name
 

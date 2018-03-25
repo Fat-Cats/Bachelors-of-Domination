@@ -40,6 +40,7 @@ public class MenuScreen implements Screen {
                 return super.keyUp(keyCode);
             }
         };
+
         this.stage.setViewport(new ScreenViewport());
 
         this.table = new Table();
@@ -47,7 +48,6 @@ public class MenuScreen implements Screen {
         this.stage.addActor(table);
         this.table.setDebug(false); // enable table drawing for ui debug
         this.setupUi();
-
     }
 
     /**
@@ -127,7 +127,6 @@ public class MenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 DialogFactory.exitProgramDialogBox(stage);}
-
         })).colspan(2);
     }
 

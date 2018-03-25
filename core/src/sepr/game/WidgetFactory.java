@@ -271,7 +271,6 @@ public class WidgetFactory {
         return getLabel(labelText, gameHUDBottomBarRightPartTexture, Align.center);
     }
 
-
     /**
      * creates a label used for selecting the player type in the Game Setup Screen
      * @param labelText text to be displayed on label

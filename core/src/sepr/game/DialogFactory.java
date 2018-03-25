@@ -12,6 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.StringBuilder;
+import org.lwjgl.Sys;
+import sepr.game.playingCards.PlayingCard;
+import sepr.game.playingCards.PlayingCardManager;
+
+import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * class that produces reusable dialog windows for displaying information to the player and receiving input from them
@@ -91,6 +97,32 @@ public class DialogFactory {
         dialog.show(stage);
     }
 
+    //=========code by charlie===================
+    //dialogue used to ask a user if they are sure they want to pick a clicked card
+    public static void selectCardDialogBox(final PlayingCard selectedCard, final PlayingCardManager cardManager, final ArrayList<String> cardNameDescription) {
+
+        //display new dialogue
+        new Dialog("Confirm Card", DialogFactory.skin) {
+
+            {
+                //display name of card and description
+                text("Are you sure you want to select: " + cardNameDescription.get(0) + "?");
+                getContentTable().row();
+                text("Description: " + cardNameDescription.get(1));
+                button("Yes", true);
+                button("No", false);
+            }
+
+            //if 'yes' was clicked, activate the card
+            @Override
+            protected void result(Object object) {
+                if ((Boolean) object == true) {
+                    cardManager.activateCard(selectedCard);
+                }
+            }
+        }.show(cardManager.stage);
+    }
+    //=========code by charlie===================
 
     /**
      * creates a dialog where the player can confirm if they want to leave the current game
@@ -259,8 +291,6 @@ public class DialogFactory {
         dialog.show(stage);
     }
 
-
-
     /**
      * creates a dialog box for the player to select how many troops they want to move with
      * if player cancels the attackers[0] = 0 to signify the attack has been cancelled
@@ -309,8 +339,6 @@ public class DialogFactory {
         dialog.show(stage);
     }
 
-
-
     /**
      * dialog that displays a list of players that have been eliminated
      *
@@ -350,9 +378,6 @@ public class DialogFactory {
         dialog.show(stage);
     }
 
-
-
-
     /**
      * creates a dialog box displaying informing the player they have taken over the PVC tile
      *
@@ -368,7 +393,6 @@ public class DialogFactory {
      * @param stage to draw the box onto
      * @param miniGameScreen the mini game screen where the dialog will be shown
      */
-
     public static void leaveMiniGameDialog(final MiniGameScreen miniGameScreen, Stage stage) {
         Dialog dialog = new Dialog("Continue?", DialogFactory.skin) {
             protected void result(Object object) {
@@ -384,7 +408,6 @@ public class DialogFactory {
         dialog.show(stage);
     }
 
-
     /**
      * creates a dialog box asking if the player wants to exit the mini game
      *
@@ -393,8 +416,6 @@ public class DialogFactory {
      * @param gameScreen the map screen
      * @param troops number of troops gained from the mini game
      */
-
-
     public static void miniGameOverDialog(final Main main, Stage stage, final GameScreen gameScreen, int troops) {
         Dialog dialog = new Dialog("Game Completed", DialogFactory.skin) {
             protected void result(Object object) {
