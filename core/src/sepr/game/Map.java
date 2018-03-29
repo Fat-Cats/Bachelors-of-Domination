@@ -104,7 +104,7 @@ public class Map {
      * converts a String array of sector data to a sector object
      *
      * @param sectorData sector data taken from the sectorProperties csv file
-     * @return a sector with the properties fo the supplied data
+     * @return a sector with the properties for the supplied data
      */
     private Sector sectorDataToSector(String[] sectorData) {
         int sectorId = Integer.parseInt(sectorData[0]);
@@ -242,15 +242,15 @@ public class Map {
          * - Not all defenders killed, all attackers killed         -->     attacking sector becomes unAssigned
          * - Not all defenders killed, not all attackers killed     -->     both sides loose troops, no dialog to display
          * */
-        if (sectors.get(attackingSectorId).getUnitsInSector() == 0) { // attacker lost all troops
+        if (sectors.get(attackingSectorId).getUnitsInSector() == 0 && sectors.get(attackingSectorId).getGuardsInSector() == 0) { // attacker lost all troops
             DialogFactory.sectorOwnerChangeDialog(attacker.getPlayerName(), netrualPlayer.getPlayerName(), sectors.get(attackingSectorId).getDisplayName(), stage);
             sectors.get(attackingSectorId).setOwner(netrualPlayer);
-            if (sectors.get(defendingSectorId).getUnitsInSector() == 0) { // both players wiped each other out
+            if (sectors.get(defendingSectorId).getUnitsInSector() == 0 && sectors.get(defendingSectorId).getGuardsInSector() == 0) { // both players wiped each other out
                 DialogFactory.sectorOwnerChangeDialog(defender.getPlayerName(), netrualPlayer.getPlayerName(), sectors.get(attackingSectorId).getDisplayName(), stage);
                 sectors.get(defendingSectorId).setOwner(netrualPlayer);
             }
 
-        } else if (sectors.get(defendingSectorId).getUnitsInSector() == 0 && sectors.get(attackingSectorId).getUnitsInSector() > 1) { // territory conquered
+        } else if (sectors.get(defendingSectorId).getUnitsInSector() == 0 && sectors.get(defendingSectorId).getGuardsInSector() == 0 && sectors.get(attackingSectorId).getUnitsInSector() > 1) { // territory conquered
 
             unitsToMove = new int[3];
             unitsToMove[0] = -1;
@@ -275,10 +275,42 @@ public class Map {
             DialogFactory.attackSuccessDialogBox(sectors.get(defendingSectorId).getReinforcementsProvided(), sectors.get(attackingSectorId).getUnitsInSector(), unitsToMove, defender.getPlayerName(), attacker.getPlayerName(), sectors.get(defendingSectorId).getDisplayName(), stage);
 
 
-        } else if (sectors.get(defendingSectorId).getUnitsInSector() == 0 && sectors.get(attackingSectorId).getUnitsInSector() == 1) { // territory conquered but only one attacker remaining so can't move troops onto it
+        } else if (sectors.get(defendingSectorId).getUnitsInSector() == 0 && sectors.get(defendingSectorId).getGuardsInSector() == 0 && sectors.get(attackingSectorId).getUnitsInSector() == 1) { // territory conquered but only one attacker remaining so can't move troops onto it
             DialogFactory.sectorOwnerChangeDialog(defender.getPlayerName(), netrualPlayer.getPlayerName(), sectors.get(defendingSectorId).getDisplayName(), stage);
             sectors.get(defendingSectorId).setOwner(netrualPlayer);
         }
+        return true;
+    }
+
+
+    public boolean attackSectorGuards(int attackingSectorId, int defendingSectorId, int attackersLost, int guardsLost, Player attacker, Player defender, Player netrualPlayer, Stage stage) {
+        if (sectors.get(attackingSectorId).getUnitsInSector() < attackersLost) {
+            throw new IllegalArgumentException("Cannot loose more attackers than are on the sector: Attackers " + sectors.get(attackingSectorId).getUnitsInSector() + "     Attackers Lost " + attackersLost);
+        }
+        if (sectors.get(defendingSectorId).getGuardsInSector() < guardsLost) {
+            throw new IllegalArgumentException("Cannot loose more guards than are on the sector: Defenders " + sectors.get(attackingSectorId).getGuardsInSector() + "     Guards Lost " + guardsLost);
+        }
+
+        addUnitsToSectorAnimated(attackingSectorId, -attackersLost); // apply amount of attacking units lost
+        addGuardsToSectorAnimated(defendingSectorId, -guardsLost); // apply amount of guards lost
+
+        /*
+         * explain outcome to player using dialog boxes, possible outcomes
+         * - All guards killed, 0 or more attackers left            -->     both sides loose troops, no dialog to display, check if for normal defenders otherwise make neutral, which can be captured instantly with another attack
+         * - Not all guards killed, all attackers killed            -->     attacking sector becomes unAssigned
+         * - Not all guards killed, not all attackers killed        -->     both sides loose troops, no dialog to display
+         */
+
+        if (sectors.get(attackingSectorId).getUnitsInSector() == 0 && sectors.get(attackingSectorId).getGuardsInSector() == 0) { // attacker lost all attackers and had no guards left
+           DialogFactory.sectorOwnerChangeDialog(attacker.getPlayerName(), netrualPlayer.getPlayerName(), sectors.get(attackingSectorId).getDisplayName(), stage);
+           sectors.get(attackingSectorId).setOwner(netrualPlayer);
+        }
+
+        if (sectors.get(defendingSectorId).getUnitsInSector() == 0 && sectors.get(defendingSectorId).getGuardsInSector() == 0) { // lost all guards, check if got any defenders to maintain control
+            DialogFactory.sectorOwnerChangeDialog(defender.getPlayerName(), netrualPlayer.getPlayerName(), sectors.get(attackingSectorId).getDisplayName(), stage);
+            sectors.get(defendingSectorId).setOwner(netrualPlayer);
+        }
+
         return true;
     }
 
@@ -304,12 +336,21 @@ public class Map {
 
     /**
      * adds the specified number of units to this sector and sets up drawing a particle effect showing the addition
-     *
      * @param sectorId id of sector to add the units to
      * @param amount   of units to add
      */
     public void addUnitsToSectorAnimated(int sectorId, int amount) {
         this.sectors.get(sectorId).addUnits(amount);
+        this.particles.add(new UnitChangeParticle(amount, new Vector2(sectors.get(sectorId).getSectorCentreX(), sectors.get(sectorId).getSectorCentreY())));
+    }
+
+    /** THOMAS
+     * adds the specified number of guards to this sector and sets up drawing a particle effect showing the addition
+     * @param sectorId id of the sector to add guards to
+     * @param amount   of units to add
+     */
+    public void addGuardsToSectorAnimated(int sectorId, int amount) {
+        this.sectors.get(sectorId).addGuards(amount);
         this.particles.add(new UnitChangeParticle(amount, new Vector2(sectors.get(sectorId).getSectorCentreX(), sectors.get(sectorId).getSectorCentreY())));
     }
 
@@ -407,7 +448,7 @@ public class Map {
         detectUnitsMove(); // check if units need to be moved, and carry the movement out if required
 
         for (Sector sector : sectors.values()) {
-            String text = sector.getUnitsInSector() + "";
+            String text = sector.getUnitsInSector() + "/" + sector.getGuardsInSector();
             batch.draw(sector.getSectorTexture(), 0, 0);
             if (!sector.isDecor()) { // don't need to draw the amount of units on a decor sector
                 layout.setText(font, text);

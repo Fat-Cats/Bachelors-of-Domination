@@ -16,6 +16,7 @@ public class Sector implements ApplicationListener {
     private int ownerId;
     private String displayName;
     private int unitsInSector;
+    private int guardsInSector; //added by Thomas
     private int reinforcementsProvided;
     private String college; // name of the college this sector belongs to
     private boolean neutral; // is this sector a default neutral sector
@@ -164,6 +165,12 @@ public class Sector implements ApplicationListener {
         return unitsInSector;
     }
 
+    /** THOMAS
+     *
+     * @return number of guards present in this sector
+     */
+    public int getGuardsInSector() { return guardsInSector;}
+
     /**
      *
      * @return the texture used for drawing the sectorNeutral
@@ -258,7 +265,7 @@ public class Sector implements ApplicationListener {
     /**
      * Changes the number of units in this sector
      * If there are 0 units in sector then ownerId should be -1 (neutral)
-     * @param amount number of units to change by, (can be negative to subtract units
+     * @param amount number of units to change by, (can be negative to subtract units)
      * @throws IllegalArgumentException if units in sector is below 0
      */
     public void addUnits(int amount) throws IllegalArgumentException {
@@ -266,6 +273,20 @@ public class Sector implements ApplicationListener {
         if (this.unitsInSector < 0) {
             this.unitsInSector = 0;
             throw new IllegalArgumentException("Cannot have less than 0 units on a sector");
+        }
+    }
+
+    /** THOMAS
+     * Changes the number of guards in this sector
+     * A player can have 0 guards as long as they have some units
+     * @param amount number of guards to change by, (can be negative to subtract guards)
+     * @throws IllegalArgumentException
+     */
+    public void addGuards(int amount) throws IllegalArgumentException {
+        this.guardsInSector += amount;
+        if (this.guardsInSector < 0) {
+            this.guardsInSector = 0;
+            throw new IllegalArgumentException("Cannot have less than 0 guards on a sector");
         }
     }
 

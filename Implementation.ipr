@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
+    <option name="DEFAULT_COMPILER" value="Javac" />
     <resourceExtensions>
       <entry name=".+\.(properties|xml|html|dtd|tld)" />
       <entry name=".+\.(gif|png|jpeg|jpg)" />
@@ -9,6 +10,11 @@
       <entry name="!?*.java" />
       <entry name="!?*.groovy" />
     </wildcardResourcePatterns>
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="false">
+        <processorPath useClasspath="true" />
+      </profile>
+    </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="Bachelors-of-Domination_main" target="1.8" />
       <module name="Bachelors-of-Domination_test" target="1.8" />
@@ -23,12 +29,17 @@
     <option name="SKIP_IMPORT_STATEMENTS" value="false" />
   </component>
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" />
+  <component name="EntryPointsManager">
+    <entry_points version="2.0" />
+  </component>
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$" />
+  </component>
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="1.8" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -47,12 +58,6 @@
     <setting name="root" />
   </component>
   <component name="IdProvider" IDEtalkID="11DA1DB66DD62DDA1ED602B7079FE97C" />
-  <component name="InspectionProjectProfileManager">
-    <profile version="1.0">
-      <option name="myName" value="Project Default" />
-    </profile>
-    <version value="1.0" />
-  </component>
   <component name="JavadocGenerationManager">
     <option name="OUTPUT_DIRECTORY" />
     <option name="OPTION_SCOPE" value="protected" />
@@ -201,10 +206,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Bachelors-of-Domination.iml" filepath="$PROJECT_DIR$/Bachelors-of-Domination.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Bachelors-of-Domination_main.iml" filepath="$PROJECT_DIR$/Bachelors-of-Domination_main.iml" group="Bachelors-of-Domination" />
-      <module fileurl="file://$PROJECT_DIR$/Bachelors-of-Domination_main.iml" filepath="$PROJECT_DIR$/Bachelors-of-Domination_main.iml" group="Bachelors-of-Domination" />
-      <module fileurl="file://$PROJECT_DIR$/Bachelors-of-Domination_test.iml" filepath="$PROJECT_DIR$/Bachelors-of-Domination_test.iml" group="Bachelors-of-Domination" />
-      <module fileurl="file://$PROJECT_DIR$/Bachelors-of-Domination_test.iml" filepath="$PROJECT_DIR$/Bachelors-of-Domination_test.iml" group="Bachelors-of-Domination" />
       <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" group="core" />
       <module fileurl="file://$PROJECT_DIR$/core/core_main.iml" filepath="$PROJECT_DIR$/core/core_main.iml" group="core" />
       <module fileurl="file://$PROJECT_DIR$/core/core_test.iml" filepath="$PROJECT_DIR$/core/core_test.iml" group="core" />
@@ -213,7 +214,7 @@
       <module fileurl="file://$PROJECT_DIR$/desktop/desktop_test.iml" filepath="$PROJECT_DIR$/desktop/desktop_test.iml" group="desktop" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" assert-keyword="true" jdk-15="true">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="SvnBranchConfigurationManager">
@@ -235,9 +236,12 @@
     <library name="Gradle: com.badlogicgames.gdx:gdx-backend-headless:1.9.5">
       <CLASSES>
         <root url="jar://$MAVEN_REPOSITORY$/com/badlogicgames/gdx/gdx-backend-headless/1.9.5/gdx-backend-headless-1.9.5.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-backend-headless/1.9.5/e40835813ee0c96036e38d6676ee10982e51922a/gdx-backend-headless-1.9.5.jar!/" />
       </CLASSES>
       <JAVADOC />
-      <SOURCES />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-backend-headless/1.9.5/dc658a59a33e582c2f7ce4a99be0acb1d9b255af/gdx-backend-headless-1.9.5-sources.jar!/" />
+      </SOURCES>
     </library>
     <library name="Gradle: com.badlogicgames.gdx:gdx-backend-lwjgl:1.9.5">
       <CLASSES>
@@ -247,6 +251,13 @@
       <SOURCES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-backend-lwjgl/1.9.5/746874b7c5ec7d49eae06d891417af0f7dd29ff6/gdx-backend-lwjgl-1.9.5-sources.jar!/" />
       </SOURCES>
+    </library>
+    <library name="Gradle: com.badlogicgames.gdx:gdx-box2d-platform:1.9.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-box2d-platform/1.9.5/949c188c91f775dd9f17725989dfc20e1be44f76/gdx-box2d-platform-1.9.5-natives-desktop.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
     </library>
     <library name="Gradle: com.badlogicgames.gdx:gdx-box2d-platform:natives-desktop:1.9.5">
       <CLASSES>
@@ -264,9 +275,23 @@
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-box2d/1.9.5/75c262f9ca8e522063388daf21c2a91a60724a1b/gdx-box2d-1.9.5-sources.jar!/" />
       </SOURCES>
     </library>
+    <library name="Gradle: com.badlogicgames.gdx:gdx-freetype-platform:1.9.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-freetype-platform/1.9.5/8ceda028ccbad322d1c02bb806291d2b6bed0232/gdx-freetype-platform-1.9.5-natives-desktop.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
     <library name="Gradle: com.badlogicgames.gdx:gdx-freetype-platform:natives-desktop:1.9.5">
       <CLASSES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-freetype-platform/1.9.5/8ceda028ccbad322d1c02bb806291d2b6bed0232/gdx-freetype-platform-1.9.5-natives-desktop.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: com.badlogicgames.gdx:gdx-platform:1.9.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-platform/1.9.5/bc0c7ee7fca96eb3c691b5a87cf11fd4d9f1bab6/gdx-platform-1.9.5-natives-desktop.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -281,9 +306,12 @@
     <library name="Gradle: com.badlogicgames.gdx:gdx:1.9.5">
       <CLASSES>
         <root url="jar://$MAVEN_REPOSITORY$/com/badlogicgames/gdx/gdx/1.9.5/gdx-1.9.5.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx/1.9.5/dc65bb2f51828c58b1b2b3ac585357204d54ee5f/gdx-1.9.5.jar!/" />
       </CLASSES>
       <JAVADOC />
-      <SOURCES />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx/1.9.5/df0e6a52ed42009b20ab64cc81e57c3ae24d9109/gdx-1.9.5-sources.jar!/" />
+      </SOURCES>
     </library>
     <library name="Gradle: com.badlogicgames.jlayer:jlayer:1.0.1-gdx">
       <CLASSES>
@@ -338,6 +366,13 @@
       <SOURCES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy/1.4.33/47580b88aba71708e25a9662e8411b34bf1d73f6/byte-buddy-1.4.33-sources.jar!/" />
       </SOURCES>
+    </library>
+    <library name="Gradle: net.java.jinput:jinput-platform:2.0.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.java.jinput/jinput-platform/2.0.5/53f9c919f34d2ca9de8c51fc4e1e8282029a9232/jinput-platform-2.0.5-natives-osx.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
     </library>
     <library name="Gradle: net.java.jinput:jinput-platform:natives-linux:2.0.5">
       <CLASSES>
@@ -405,6 +440,13 @@
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jcraft/jorbis/0.0.17/5446be5d62e4c6b347c8e6cd28dc00a936417ba2/jorbis-0.0.17-sources.jar!/" />
       </SOURCES>
     </library>
+    <library name="Gradle: org.lwjgl.lwjgl:lwjgl-platform:2.9.2">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl.lwjgl/lwjgl-platform/2.9.2/d55b46b40b40249d627a83a7f7f22649709d70c3/lwjgl-platform-2.9.2-natives-osx.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
     <library name="Gradle: org.lwjgl.lwjgl:lwjgl-platform:natives-linux:2.9.2">
       <CLASSES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lwjgl.lwjgl/lwjgl-platform/2.9.2/d276cdf61fe2b516c7b7f4aa1b8dea91dbdc8d56/lwjgl-platform-2.9.2-natives-linux.jar!/" />
@@ -447,9 +489,12 @@
     <library name="Gradle: org.mockito:mockito-core:2.2.7">
       <CLASSES>
         <root url="jar://$MAVEN_REPOSITORY$/org/mockito/mockito-core/2.2.7/mockito-core-2.2.7.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-core/2.2.7/922878534af778be4787285365b1d56804526de2/mockito-core-2.2.7.jar!/" />
       </CLASSES>
       <JAVADOC />
-      <SOURCES />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mockito/mockito-core/2.2.7/ea957050b87cfd5c169ed5b899dcc0798629f872/mockito-core-2.2.7-sources.jar!/" />
+      </SOURCES>
     </library>
     <library name="Gradle: org.objenesis:objenesis:2.4">
       <CLASSES>

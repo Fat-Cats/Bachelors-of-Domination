@@ -61,7 +61,7 @@ public class GameScreen implements Screen, InputProcessor{
      * sets up rendering objects and key input handling
      * setupGame then start game must be called before a game is ready to be played
      *
-     * @param main used to change screenthis.phases = phases;
+     * @param main used to change screen this.phases = phases;
      */
 
     public GameScreen(Main main) {
@@ -202,7 +202,7 @@ public class GameScreen implements Screen, InputProcessor{
 
     /**
      *
-     * @return gets the player object for the player who's turn it currently is
+     * @return gets the player object for the player who's turn it previously was
      */
     private Player getPreviousPlayer() {
         return players.get(turnOrder.get(previousPlayerPointer));

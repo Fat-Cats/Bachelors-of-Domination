@@ -11,6 +11,7 @@ public class Player {
     private GameSetupScreen.CollegeName collegeName; // college this player chose
     private String playerName;
     private int troopsToAllocate; // how many troops the player has to allocate at the start of their next reinforcement phase
+    private int guardsToAllocate; // how many guards the player has to allocate at the start of their next reinforcement phase, Thomas
     private Color sectorColour; // what colour to shade sectors owned by the player
     private PlayerType playerType; // Human or Neutral player
     private Boolean OwnsPVC;
@@ -28,6 +29,7 @@ public class Player {
         this.id = id;
         this.collegeName = collegeName;
         this.troopsToAllocate = 0;
+        this.guardsToAllocate = 0; //added by Thomas
         this.sectorColour = sectorColour;
         this.playerType = playerType;
         this.playerName = playerName;
@@ -123,7 +125,6 @@ public class Player {
 
     /**
      * sets the number of troops this player has to allocate to this value
-     *
      * @param troopsToAllocate number of troops to allocate
      */
     public void setTroopsToAllocate(int troopsToAllocate) {
@@ -137,4 +138,22 @@ public class Player {
     public void addTroopsToAllocate(int troopsToAllocate) {
         this.troopsToAllocate += troopsToAllocate;
     }
+
+    /** THOMAS
+     * fetches number of guards this player can allocate in their next turn
+     * @return amount of guards to allocate
+     */
+    public int getGuardsToAllocate() {return guardsToAllocate;}
+
+    /** THOMAS
+     * sets the number of guards this player has to allocate to this value
+     * @param guardsToAllocate number of guards to allocate
+     */
+    public void setGuardsToAllocate(int guardsToAllocate) {this.guardsToAllocate = guardsToAllocate;}
+
+    /** THOMAS
+     * increases the number of guards to allocate by the given amount
+     * @param guardsToAllocate amount to increase allocation by
+     */
+    public void addGuardsToAllocate(int guardsToAllocate) {this.guardsToAllocate += guardsToAllocate;}
 }
