@@ -203,8 +203,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Bachelors-of-Domination.iml" filepath="$PROJECT_DIR$/Bachelors-of-Domination.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Bachelors-of-Domination_main.iml" filepath="$PROJECT_DIR$/Bachelors-of-Domination_main.iml" group="Bachelors-of-Domination" />
-      <module fileurl="file://$PROJECT_DIR$/Bachelors-of-Domination_test.iml" filepath="$PROJECT_DIR$/Bachelors-of-Domination_test.iml" group="Bachelors-of-Domination" />
       <module fileurl="file://$PROJECT_DIR$/SEPRassess4-Bachelors-of-Domination_main.iml" filepath="$PROJECT_DIR$/SEPRassess4-Bachelors-of-Domination_main.iml" group="Bachelors-of-Domination" />
       <module fileurl="file://$PROJECT_DIR$/SEPRassess4-Bachelors-of-Domination_test.iml" filepath="$PROJECT_DIR$/SEPRassess4-Bachelors-of-Domination_test.iml" group="Bachelors-of-Domination" />
       <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" group="core" />

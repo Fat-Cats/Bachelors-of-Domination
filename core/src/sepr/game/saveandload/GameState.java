@@ -5,6 +5,8 @@ import sepr.game.GameSetupScreen;
 import sepr.game.Map;
 import sepr.game.Player;
 import sepr.game.Sector;
+import sepr.game.playingCards.PlayingCard;
+import sepr.game.playingCards.PlayingCardManager;
 import sepr.game.utils.PlayerType;
 import sepr.game.utils.TurnPhaseType;
 
@@ -46,6 +48,10 @@ public class GameState {
         public Color sectorColour; // The colour to use for the player's sectors
         public PlayerType playerType; // The player's type
         public boolean ownsPVC; // Whether the player owns the PVC
+
+        //======code by charlie=============
+        public PlayingCardManager cardManager; //cards owned by this player
+        //======code by charlie=============
     }
 
     /**
