@@ -53,8 +53,8 @@ public class DialogFactory {
      * @param troopsToAllocate Integer to be used to display number of troops the player has to allocate
      * @param stage to draw the box onto
      */
-    public static void nextTurnDialogBox(String nextPlayer, Integer troopsToAllocate, Stage stage) {
-        basicDialogBox("Next Turn", "Next Player: " + nextPlayer + "\nTroops to Allocate: " + troopsToAllocate, stage);
+    public static void nextTurnDialogBox(String nextPlayer, Integer troopsToAllocate, Integer guardsToAllocate, Stage stage) {
+        basicDialogBox("Next Turn", "Next Player: " + nextPlayer + "\nTroops to Allocate: " + troopsToAllocate + "\nGuards to allocate: " + guardsToAllocate, stage);
     }
 
     /**
@@ -204,35 +204,50 @@ public class DialogFactory {
      * creates a dialog modal allowing the user to select how many units they want to allocate to a sector
      *
      * @param maxAllocation maximum amount of troops that can be assigned
-     * @param allocation 2 index array storing : [0] number of troops to allocate ; [1] id of sector to allocate to
+     * @param maxAllocation2 maximum amount of guards that can be assigned, added by Thomas
+     * @param allocation 3 index array storing : [0] number of troops to allocate ; [1] id of sector to allocate to ; [2] number of guards to allocate
      * @param sectorName name of sector being allocated to
      * @param stage to draw the box onto
      */
-    public static void allocateUnitsDialog(Integer maxAllocation, final int[] allocation, String sectorName, Stage stage) {
+    public static void allocateUnitsDialog(Integer maxAllocation, Integer maxAllocation2, final int[] allocation, String sectorName, Stage stage) {
         final Slider slider = new Slider(0, maxAllocation, 1, false, DialogFactory.skin);
-        final Label sliderValue = new Label("1", DialogFactory.skin);
+        final Slider slider2 = new Slider(0, maxAllocation2, 1, false, DialogFactory.skin);
+        final Label sliderValue = new Label("0", DialogFactory.skin);
+        final Label slider2Value = new Label("0", DialogFactory.skin);
+
         slider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 sliderValue.setText(new StringBuilder((int)slider.getValue() + ""));
             }
         });
+        slider2.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                slider2Value.setText(new StringBuilder((int)slider2.getValue() + ""));
+            }
+        });
 
-        Dialog dialog = new Dialog("Select amount of troops to allocate", DialogFactory.skin) {
+        Dialog dialog = new Dialog("Select amount of troops and guards to allocate", DialogFactory.skin) {
             protected void result(Object object) {
                 if (object.equals("0")) { // Cancel button pressed
                     allocation[0] = -1;
                     allocation[1] = -1; // set allocating sector id to -1 to indicate the allocation has been cancelled
+                    allocation[2] = -1;
                 } else if (object.equals("1")) { // Ok button pressed
                     allocation[0] = (int)slider.getValue(); // set the number of troops to allocate to the value of the slider
+                    allocation[2] = (int)slider2.getValue(); // set the number of guards to allocate to the value of the slider
                 }
             }
         };
-        dialog.text("You can allocate up to " + maxAllocation + " troops to " + sectorName);
+        dialog.text("You can allocate up to " + maxAllocation + " troops and " + maxAllocation2 + " guards to " + sectorName);
         dialog.getContentTable().row();
 
         dialog.getContentTable().add(slider).padLeft(20).padRight(20).align(Align.left).expandX();
         dialog.getContentTable().add(sliderValue).padLeft(20).padRight(20).align(Align.right);
+        dialog.getContentTable().row();
+        dialog.getContentTable().add(slider2).padLeft(20).padRight(20).align(Align.left).expandX();
+        dialog.getContentTable().add(slider2Value).padLeft(20).padRight(20).align(Align.right);
 
         dialog.getContentTable().row();
 
@@ -247,11 +262,12 @@ public class DialogFactory {
      *
      * @param maxAttackers max number of attackers the player chooses to attack with
      * @param defenders how many units are defending
+     * @param guards how many guards are defending
      * @param attackers 1 index array for setting number of troops the player has chosen to attack with: [0] number of troops player has set to attack with
      * @param stage to display the dialog on
      * @return the number of troops chosen to attack with or 0 if the attack is canceled
      */
-    public static void attackDialog(int maxAttackers, int defenders, final int[] attackers, Stage stage) {
+    public static void attackDialog(int maxAttackers, int defenders, int guards, final int[] attackers, Stage stage) {
         final Slider slider = new Slider(0, maxAttackers, 1, false, DialogFactory.skin);
         slider.setValue(maxAttackers);
         final Label sliderValue = new Label(maxAttackers + "", DialogFactory.skin); // label showing the value of the slider
@@ -274,6 +290,7 @@ public class DialogFactory {
 
         // add labels saying the max number of attackers and how many defenders there are
         dialog.text(new Label("Max attackers: " + maxAttackers, DialogFactory.skin)).padLeft(20).padRight(20).align(Align.left);
+        dialog.text(new Label("Guards: " + guards, DialogFactory.skin)).padLeft(20).padRight(20).align(Align.center);
         dialog.text(new Label("Defenders: " + defenders, DialogFactory.skin)).padLeft(20).padRight(20).align(Align.right);
 
         dialog.getContentTable().row();

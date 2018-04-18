@@ -38,6 +38,7 @@ public abstract class Phase extends Stage {
 
     private Label playerNameLabel; // displays the name of the current player in their college's colour colour
     private Label reinforcementLabel; // label showing how many troops the player has to allocate in their next reinforcement phase
+    private Label guardReinforcementLabel; //label showing how many guards the player has to allocate in their next reinforcement phase, Thomas
     private Label turnTimerLabel; // displays how much time the player has left
     private Image collegeLogo; // ui component for displaying the logo of the current players college
 
@@ -146,6 +147,7 @@ public abstract class Phase extends Stage {
 
         playerNameLabel = new Label("", playerNameStyle);
         reinforcementLabel = new Label("", style);
+        guardReinforcementLabel = new Label("", style); //added by Thomas
         turnTimerLabel = new Label("Timer: DISABLED", style);
         collegeLogo = new Image(WidgetFactory.genCollegeLogoDrawable(GameSetupScreen.CollegeName.UNI_OF_YORK));
 
@@ -155,6 +157,8 @@ public abstract class Phase extends Stage {
         Table subTable = new Table();
         subTable.left().add(collegeLogo).height(80).width(100).pad(0);
         subTable.right().add(playerNameLabel).pad(0);
+        subTable.row();
+        subTable.add(guardReinforcementLabel).colspan(2); //added by Thomas
         subTable.row();
         subTable.add(reinforcementLabel).colspan(2);
         subTable.row();
@@ -196,6 +200,7 @@ public abstract class Phase extends Stage {
         playerNameLabel.setText(new StringBuilder((CharSequence) currentPlayer.getPlayerName())); // change the bottom bar label to the players name
         collegeLogo.setDrawable(WidgetFactory.genCollegeLogoDrawable(player.getCollegeName()));
         updateTroopReinforcementLabel();
+        updateGuardReinforcementLabel(); //added by Thomas
     }
 
     /**
@@ -212,6 +217,10 @@ public abstract class Phase extends Stage {
      */
     void updateTroopReinforcementLabel() {
         this.reinforcementLabel.setText("Troop Allocation: " + currentPlayer.getTroopsToAllocate());
+    }
+
+    void updateGuardReinforcementLabel() {
+        this.guardReinforcementLabel.setText("Guard Allocation: " + currentPlayer.getGuardsToAllocate()); //added by Thomas TEST
     }
 
     /**

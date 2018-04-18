@@ -23,7 +23,7 @@ public class Main extends Game implements ApplicationListener {
 	private GameScreen gameScreen;
 	private OptionsScreen optionsScreen;
 	private GameSetupScreen gameSetupScreen;
-	//declar managers for save/load and audio handling
+	//declare managers for save/load and audio handling
 	private SaveLoadManager saveLoadManager;
 	private AudioManager Audio = AudioManager.getInstance();
 

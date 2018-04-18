@@ -36,7 +36,7 @@ public class PhaseAttack extends PhaseAttackMove{
         }
         numOfAttackers = new int[1];
         numOfAttackers[0] = -1;
-        DialogFactory.attackDialog(attackingSector.getUnitsInSector(), defendingSector.getUnitsInSector(), numOfAttackers, this);
+        DialogFactory.attackDialog(attackingSector.getUnitsInSector(), defendingSector.getUnitsInSector(), defendingSector.getGuardsInSector(), numOfAttackers, this);
     }
 
     /**
@@ -45,66 +45,122 @@ public class PhaseAttack extends PhaseAttackMove{
     private void executeAttack() {
         int attackers = numOfAttackers[0];
         int defenders = defendingSector.getUnitsInSector();
+        int guards = defendingSector.getGuardsInSector();
 
-        float propAttack = (float)attackers / (float)(attackers + defenders); // proportion of troops that are attackers
-        float propDefend = (float)defenders / (float)(attackers + defenders); // proportion of troops that are defenders
 
-        // calculate the proportion of attackers and defenders lost
-        float propAttackersLost = (float)Math.max(0, Math.min(1, 0.02 * Math.exp(5 * propDefend) + 0.1 + (-0.125 + random.nextFloat()/4)));
-        float propDefendersLost = (float)Math.max(0, Math.min(1, 0.02 * Math.exp(5 * propAttack) + 0.15 + (-0.125 + random.nextFloat()/4)));
+        if (guards > 0) { //attack guards first
+            float propAttack = (float)attackers / (float)(attackers + guards); // proportion of troops that are attackers
+            float propGuard = (float)guards / (float)(attackers + guards); //proportion of troops that are guards
 
-        if (propAttack == 1) { // if attacking an empty sector then no attackers will be lost
-            propAttackersLost = 0;
-            propDefendersLost = 1;
-        }
+            // calculate the proportion of attackers and defenders lost
+            float propAttackersLost = (float)Math.max(0, Math.min(1, 0.02 * Math.exp(5 * propGuard) + 0.2 + (-0.125 + random.nextFloat()/4)));
+            float propGuardsLost = (float)Math.max(0, Math.min(1, 0.02 * Math.exp(5 * propAttack) + 0.1 + (-0.125 + random.nextFloat()/4)));
 
-        int attackersLost = (int)(attackers * propAttackersLost);
-        int defendersLost = (int)(defenders * propDefendersLost);
+            int attackersLost = (int)(attackers * propAttackersLost);
+            int guardsLost = (int)(guards * propGuardsLost);
 
-        if(attackersLost > defendersLost){
-            // Poor Move
-            int voice = random.nextInt(3);
+            if(attackersLost > guardsLost){
+                // Poor Move
+                int voice = random.nextInt(3);
 
-            switch (voice){
-                case 0:
-                    Audio.get("sound/Invalid Move/Colin_Your_actions_are_questionable.wav", Sound.class).play(AudioManager.GlobalFXvolume);
-                    break;
-                case 1:
-                    Audio.get("sound/Battle Phrases/Colin_Seems_Risky_To_Me.wav", Sound.class).play(AudioManager.GlobalFXvolume);
-                    break;
-                case 2:
-                    break;
+                switch (voice){
+                    case 0:
+                        Audio.get("sound/Invalid Move/Colin_Your_actions_are_questionable.wav", Sound.class).play(AudioManager.GlobalFXvolume);
+                        break;
+                    case 1:
+                        Audio.get("sound/Battle Phrases/Colin_Seems_Risky_To_Me.wav", Sound.class).play(AudioManager.GlobalFXvolume);
+                        break;
+                    case 2:
+                        break;
+                }
+            } else {
+                // Good move
+                int voice = random.nextInt(5);
+
+                switch (voice){
+                    case 0:
+                        Audio.get("sound/Battle Phrases/Colin_An_Unlikely_Victory.wav", Sound.class).play(AudioManager.GlobalFXvolume);
+                        break;
+                    case 1:
+                        Audio.get("sound/Battle Phrases/Colin_Far_better_than_I_expected.wav", Sound.class).play(AudioManager.GlobalFXvolume);
+                        break;
+                    case 2:
+                        Audio.get("sound/Battle Phrases/Colin_I_couldnt_have_done_it_better_myself.wav", Sound.class).play(AudioManager.GlobalFXvolume);
+                        break;
+                    case 3:
+                        Audio.get("sound/Battle Phrases/Colin_Multiplying_by_the_identity_matrix_is_more_fasinating_than_your_last_move.wav", Sound.class).play(AudioManager.GlobalFXvolume);
+                        break;
+                    case 4:
+                        Audio.get("sound/Battle Phrases/Colin_Well_Done.wav", Sound.class).play(AudioManager.GlobalFXvolume);
+                        break;
+                    case 5:
+                        break;
+                }
             }
-        } else {
-            // Good move
-            int voice = random.nextInt(5);
 
-            switch (voice){
-                case 0:
-                    Audio.get("sound/Battle Phrases/Colin_An_Unlikely_Victory.wav", Sound.class).play(AudioManager.GlobalFXvolume);
-                    break;
-                case 1:
-                    Audio.get("sound/Battle Phrases/Colin_Far_better_than_I_expected.wav", Sound.class).play(AudioManager.GlobalFXvolume);
-                    break;
-                case 2:
-                    Audio.get("sound/Battle Phrases/Colin_I_couldnt_have_done_it_better_myself.wav", Sound.class).play(AudioManager.GlobalFXvolume);
-                    break;
-                case 3:
-                    Audio.get("sound/Battle Phrases/Colin_Multiplying_by_the_identity_matrix_is_more_fasinating_than_your_last_move.wav", Sound.class).play(AudioManager.GlobalFXvolume);
-                    break;
-                case 4:
-                    Audio.get("sound/Battle Phrases/Colin_Well_Done.wav", Sound.class).play(AudioManager.GlobalFXvolume);
-                    break;
-                case 5:
-                    break;
+            // apply the attack to the map
+            if (gameScreen.getMap().attackSectorGuards(attackingSector.getId(), defendingSector.getId(), attackersLost, guardsLost, gameScreen.getPlayerById(attackingSector.getOwnerId()), gameScreen.getPlayerById(defendingSector.getOwnerId()), gameScreen.getPlayerById(gameScreen.NEUTRAL_PLAYER_ID), this)) {
+                updateTroopReinforcementLabel();
             }
-        }
+        } else { //attack troops as no guards
+            float propAttack = (float)attackers / (float)(attackers + defenders); // proportion of troops that are attackers
+            float propDefend = (float)defenders / (float)(attackers + defenders); // proportion of troops that are defenders
 
-        // apply the attack to the map
-        if (gameScreen.getMap().attackSector(attackingSector.getId(), defendingSector.getId(), attackersLost, defendersLost, gameScreen.getPlayerById(attackingSector.getOwnerId()), gameScreen.getPlayerById(defendingSector.getOwnerId()), gameScreen.getPlayerById(gameScreen.NEUTRAL_PLAYER_ID), this)) {
+            // calculate the proportion of attackers and defenders lost
+            float propAttackersLost = (float)Math.max(0, Math.min(1, 0.02 * Math.exp(5 * propDefend) + 0.1 + (-0.125 + random.nextFloat()/4)));
+            float propDefendersLost = (float)Math.max(0, Math.min(1, 0.02 * Math.exp(5 * propAttack) + 0.15 + (-0.125 + random.nextFloat()/4)));
 
+            if (propAttack == 1) { // if attacking an empty sector then no attackers will be lost
+                propAttackersLost = 0;
+                propDefendersLost = 1;
+            }
 
-            updateTroopReinforcementLabel();
+            int attackersLost = (int)(attackers * propAttackersLost);
+            int defendersLost = (int)(defenders * propDefendersLost);
+
+            if(attackersLost > defendersLost){
+                // Poor Move
+                int voice = random.nextInt(3);
+
+                switch (voice){
+                    case 0:
+                        Audio.get("sound/Invalid Move/Colin_Your_actions_are_questionable.wav", Sound.class).play(AudioManager.GlobalFXvolume);
+                        break;
+                    case 1:
+                        Audio.get("sound/Battle Phrases/Colin_Seems_Risky_To_Me.wav", Sound.class).play(AudioManager.GlobalFXvolume);
+                        break;
+                    case 2:
+                        break;
+                }
+            } else {
+                // Good move
+                int voice = random.nextInt(5);
+
+                switch (voice){
+                    case 0:
+                        Audio.get("sound/Battle Phrases/Colin_An_Unlikely_Victory.wav", Sound.class).play(AudioManager.GlobalFXvolume);
+                        break;
+                    case 1:
+                        Audio.get("sound/Battle Phrases/Colin_Far_better_than_I_expected.wav", Sound.class).play(AudioManager.GlobalFXvolume);
+                        break;
+                    case 2:
+                        Audio.get("sound/Battle Phrases/Colin_I_couldnt_have_done_it_better_myself.wav", Sound.class).play(AudioManager.GlobalFXvolume);
+                        break;
+                    case 3:
+                        Audio.get("sound/Battle Phrases/Colin_Multiplying_by_the_identity_matrix_is_more_fasinating_than_your_last_move.wav", Sound.class).play(AudioManager.GlobalFXvolume);
+                        break;
+                    case 4:
+                        Audio.get("sound/Battle Phrases/Colin_Well_Done.wav", Sound.class).play(AudioManager.GlobalFXvolume);
+                        break;
+                    case 5:
+                        break;
+                }
+            }
+
+            // apply the attack to the map
+            if (gameScreen.getMap().attackSector(attackingSector.getId(), defendingSector.getId(), attackersLost, defendersLost, gameScreen.getPlayerById(attackingSector.getOwnerId()), gameScreen.getPlayerById(defendingSector.getOwnerId()), gameScreen.getPlayerById(gameScreen.NEUTRAL_PLAYER_ID), this)) {
+                updateTroopReinforcementLabel();
+            }
         }
     }
 
