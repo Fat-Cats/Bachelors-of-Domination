@@ -29,6 +29,11 @@ import java.util.Random;
 public class GameScreen implements Screen, InputProcessor{
     public static final int NEUTRAL_PLAYER_ID = 4;
 
+    //========================code by charlie========================
+    //bool set to true when "PAITHENEUTRALISER" card is played
+    public static boolean paiNeutralEnabled;
+    //========================code by charlie========================
+
     public AudioManager Audio = AudioManager.getInstance(); // Access to the AudioManager
     private Main main; // main stored for switching between screens
 
@@ -70,6 +75,10 @@ public class GameScreen implements Screen, InputProcessor{
      */
 
     public GameScreen(Main main) {
+        //============code by charlie============
+        paiNeutralEnabled = false;
+        //============code by charlie============
+
         this.main = main;
 
         this.gameplayBatch = new SpriteBatch();
@@ -138,6 +147,12 @@ public class GameScreen implements Screen, InputProcessor{
         this.maxTurnTime = maxTurnTime;
         this.ProViceChancellor = new PVC((float)1.00,this);
         this.map = new Map(this.players, allocateNeutralPlayer, ProViceChancellor); // setup the game map and allocate the sectors
+
+        //=============================code by charlie=============================
+        for (Integer i : players.keySet()) {
+            players.get(i).theGameMap = this.map;
+        }
+        //=============================code by charlie=============================
 
         setUpPhases();
 

@@ -4,10 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import sepr.game.DialogFactory;
+import sepr.game.GameScreen;
 import sepr.game.Player;
 
 import java.util.ArrayList;
@@ -16,29 +18,15 @@ import java.util.Random;
 //class used to represent playing cards
 public class PlayingCard {
 
-    //enum is used to define all types of card, define their description, and activate their abilities when called
+    //enum is used to define all types of card and define their description
     public enum cardType {
 
-        REINFORCEMENT("Reinforcement",
-                "10 troops are allocated to a random sector under your control."),
-        SNOWSTORM("Snowstorm",
-                "1 randomly selected sector of yours is swapped with a randomly selected sector of an opponent."),
-        HOLD_THE_LINE("Hold the line",
-                "10 guards are allocated to a random sector under your control."),
-        CALL_TO_ARMS("Call to arms",
-                "Your next attack is given an attack bonus."),
-        POT_OF_GREED("Pot of greed",
-                "You are given 8 more units to allocate in your next allocate phase."),
-        BEAK_OF_FORBIDDEN("Beak of the forbidden one",
-                "Activating all 5 parts unleashes thev forbidden one upon your enemies."),
-        LWING_OF_FORBIDDEN("Left wing of the forbidden one",
-                "Activating all 5 parts unleashes the forbidden one upon your enemies."),
-        RWING_OF_FORBIDDEN("Right wing of the forbidden one",
-                "Activating all 5 parts unleashes the forbidden one upon your enemies."),
-        LLEG_OF_FORBIDDEN("Left leg of the forbidden one",
-                "Activating all 5 parts unleashes the forbidden one upon your enemies."),
-        RLEG_OF_FORBIDDEN("Right leg of the forbidden one",
-                "Activating all 5 parts unleashes the forbidden one upon your enemies.");
+        MUSKYBOI("Musky Boi",
+                "Our generous overlord grants you 10 extra guards in a randomly selected sector under your control"),
+        PAITHENEUTRALISER("Pai The Neutraliser",
+                "One thing you can do without Net Neutrality... play this card: The next card played will have no effect."),
+        THEZUK("The Zuk",
+                "Unleash the power of the Zuk upon a random enemy sector, destroying all guards in that sector.");
 
         //string representing the name a card type
         String cardName;
@@ -49,32 +37,6 @@ public class PlayingCard {
         cardType(String cardName, String cardDescription) {
             this.cardName = cardName;
             this.cardDescription = cardDescription;
-        }
-
-        //used to execute a card types ability
-        public void activateCard(Player currentPlayer) {
-            switch (this) {
-                case REINFORCEMENT:
-                    break;
-                case SNOWSTORM:
-                    break;
-                case HOLD_THE_LINE:
-                    break;
-                case CALL_TO_ARMS:
-                    break;
-                case POT_OF_GREED:
-                    break;
-                case BEAK_OF_FORBIDDEN:
-                    break;
-                case LLEG_OF_FORBIDDEN:
-                    break;
-                case RLEG_OF_FORBIDDEN:
-                    break;
-                case RWING_OF_FORBIDDEN:
-                    break;
-                case LWING_OF_FORBIDDEN:
-                    break;
-            }
         }
     }
 
@@ -152,6 +114,47 @@ public class PlayingCard {
             }
         });
 
+    }
+
+    //used to execute this cards ability
+    public void activateCard(Player currentPlayer) {
+
+        if (GameScreen.paiNeutralEnabled) { //if PAITHENEUTRALISER has been activated
+            GameScreen.paiNeutralEnabled = false;
+            DialogFactory.basicDialogBox("A trap card has been activated", "Pai The Neutraliser has neutralised your card!", myManager.stage);
+        }
+        else
+        {
+            //integer used to calculate random sectors
+            int randSector = 0;
+
+            switch (this.thisCardType) {
+
+                //add 10 guards to a random friendly sector
+                case MUSKYBOI:
+
+                    do {
+                        randSector = new Random().nextInt( currentPlayer.theGameMap.getSectors().size() );
+                    } while( currentPlayer.theGameMap.getSectorById(randSector).getOwnerId() != currentPlayer.getId() );
+
+                    currentPlayer.theGameMap.addGuardsToSectorAnimated(randSector, 10);
+                    break;
+
+                //the next card to be played has no effect
+                case PAITHENEUTRALISER:
+                    GameScreen.paiNeutralEnabled = true;
+                    break;
+
+                //add 10 attackers to a random friendly sector
+                case THEZUK:
+                    do {
+                        randSector = new Random().nextInt( currentPlayer.theGameMap.getSectors().size() );
+                    } while( currentPlayer.theGameMap.getSectorById(randSector).getOwnerId() != currentPlayer.getId() );
+
+                    currentPlayer.theGameMap.addUnitsToSectorAnimated(randSector, 10);
+                    break;
+            }
+        }
     }
 
     //used to dispose this card's texture

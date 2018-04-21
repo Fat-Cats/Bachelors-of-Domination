@@ -189,6 +189,12 @@ public class SaveLoadManager {
 
         this.main.setGameScreenFromLoad(this.gameScreen);
 
+        //=============================code by charlie=============================
+        for (Integer i : players.keySet()) {
+            players.get(i).theGameMap = loadedMap;
+        }
+        //=============================code by charlie=============================
+
         return true;
     }
 
@@ -242,6 +248,9 @@ public class SaveLoadManager {
             sectorState.ownerId = value.getOwnerId(); // Store the Sector's owner's ID
             sectorState.displayName = value.getDisplayName(); // Store the Sector's display name
             sectorState.unitsInSector = value.getUnitsInSector(); // Store the number of units in the Sector
+            //===========code by charlie===========
+            sectorState.guardsInSector = value.getGuardsInSector(); //store the number of guards in the sector
+            //===========code by charlie===========
             sectorState.reinforcementsProvided = value.getReinforcementsProvided(); // Store the number of reinforcements provided to the Sector
             sectorState.college = value.getCollege(); // Store the college of the Sector
             sectorState.texturePath = value.getTexturePath(); // Store the path to the Sector's texture
@@ -279,7 +288,9 @@ public class SaveLoadManager {
             playerState.sectorColour = value.getSectorColour(); // Store the Player's Sector's colour
             playerState.playerType = value.getPlayerType(); // Store the Player's type
             playerState.ownsPVC = value.getOwnsPVC(); // Store whether the Player owns the PVC
-
+            //==========code by charlie=================
+            playerState.cardManager = value.myCards;
+            //==========code by charlie=================
             gameState.playerStates[i] = playerState;
             i++;
         }

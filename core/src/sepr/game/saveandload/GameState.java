@@ -63,6 +63,12 @@ public class GameState {
         public int ownerId; // Player ID of the owning player
         public String displayName; // Name of the sector
         public int unitsInSector; // Number of units in the sector
+
+        //===========code by charlie===========
+        public int guardsInSector; //Number of guards in the sector
+        //===========code by charlie===========
+
+
         public int reinforcementsProvided; // Number of reinforcements added to the sector
         public String college; // Name of the college this sector belongs to
         public String texturePath; // Path to the sector's texture

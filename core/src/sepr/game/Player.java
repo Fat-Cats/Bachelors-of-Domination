@@ -23,6 +23,8 @@ public class Player {
     //===============code by charlie===============
     //each player is given a PlayingCardManager to keep track of their cards
     public PlayingCardManager myCards;
+    //stores a reference to the map of the game. This is used by the PlayingCard class to exectute effects of cards
+    public Map theGameMap;
     //===============code by charlie===============
 
     /**
@@ -45,8 +47,10 @@ public class Player {
         this.OwnsPVC = false;
 
         //===============code by charlie===============
-        //assign each player a new PlayingCardManager (which automatically generates 3 random cards)
+        //assign each player a new PlayingCardManager (which automatically generates 2 random cards)
+
         myCards = new PlayingCardManager(this);
+
         //===============code by charlie===============
 
 

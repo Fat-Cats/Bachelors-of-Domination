@@ -3,12 +3,13 @@ package sepr.game.playingCards;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import sepr.game.DialogFactory;
 import sepr.game.Player;
 
 import java.util.*;
 
-//PlayingCardManagers keep track of what 3 cards each player has, as well as which cards are used per turn (if any),
+//PlayingCardManagers keep track of what 2 cards each player has, as well as which cards are used per turn (if any),
 //the class extends table so that it can be added to a stage and be left to handle its own drawing positions and scales
 public class PlayingCardManager extends Table {
 
@@ -23,15 +24,15 @@ public class PlayingCardManager extends Table {
     //reference to the player that owns this playingCardManager
     private Player owner;
 
-    //if instantiated with only an owner parameter, each player is assigned 3 random playing cards
+    //if instantiated with only an owner parameter, each player is assigned 2 random playing cards
     public PlayingCardManager(Player owner){
+
         //set reference to owner, and set usedCard to -1 (indicating that no card has been played yet)
         this.owner = owner;
         this.usedCard = -1;
 
-        //assign 3 random cards
+        //assign 2 random cards
         this.ownedCards = new ArrayList<PlayingCard>();
-        ownedCards.add(new PlayingCard(this));
         ownedCards.add(new PlayingCard(this));
         ownedCards.add(new PlayingCard(this));
 
@@ -45,9 +46,9 @@ public class PlayingCardManager extends Table {
         this.owner = owner;
         this.usedCard = -1;
 
-        //only 3 cards are allowed at a time
-        if (preSelectedCards.size() == 3) {
-            //assign 3 cards, of the types specified by "preSelectedCards"
+        //only 2 cards are allowed at a time
+        if (preSelectedCards.size() == 2) {
+            //assign 2 cards, of the types specified by "preSelectedCards"
             this.ownedCards = new ArrayList<PlayingCard>();
             for (PlayingCard.cardType card : preSelectedCards) {
                 this.ownedCards.add(new PlayingCard(this, card));
@@ -64,11 +65,11 @@ public class PlayingCardManager extends Table {
     //used to format this class (which extends table) to be drawn
     private void setupCardManagerWidget(){
 
-        this.setHeight(100);
+        this.setHeight(60);
 
         //get images from owned cards, so they can be added to this table
         ArrayList<Actor> cardActors = new ArrayList<Actor>();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 2; i++) {
             if (i == usedCard) { //if a card has been used, add an empty actor in place of a card image (so it is not drawn)
                 cardActors.add(new Actor());
             }
@@ -79,28 +80,29 @@ public class PlayingCardManager extends Table {
 
         //if an empty actor has been added, set its dimensions equal to the next cards dimensions
         if (usedCard != -1) {
-            Actor notNullCard = cardActors.get((usedCard + 1) % 3);
+            Actor notNullCard = cardActors.get((usedCard + 1) % 2);
             cardActors.get(usedCard).setBounds(0, 0, notNullCard.getWidth(), notNullCard.getHeight());
         }
 
         //adjust image sizes
-        for (int i = 0; i < 3; i++) {
-            cardActors.get(i).setScale(0.6f, 0.6f);
+        for (int i = 0; i < 2; i++) {
+            cardActors.get(i).setScale(0.46f, 0.46f);
         }
 
         //add card images to table and define padding
         float width = this.getWidth();
 
-        this.add(cardActors.get(0)).padLeft(width/5);
-        this.add(cardActors.get(1)).padRight(50).padLeft(50);
-        this.add(cardActors.get(2)).padRight(width/5);
+        this.add(cardActors.get(0));
+        this.add(cardActors.get(1));
+
+        //this.add(cardActors.get(0)).padLeft(width/5);
+        //this.add(cardActors.get(1)).padRight(50).padLeft(50);
+        //this.add(cardActors.get(2)).padRight(width/5);
 
     }
 
     //used to set the stage that this card manager will be drawn on
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
+    public void setStage(Stage stage) { this.stage = stage; }
 
     //called from PlayingCard class, removes a selected card and activates its ability
     public void activateCard(PlayingCard cardPlayed) {
@@ -111,10 +113,10 @@ public class PlayingCardManager extends Table {
         }
 
         //activate card' ability
-        cardPlayed.thisCardType.activateCard(this.owner);
+        cardPlayed.activateCard(this.owner);
 
         //search for used card and dispose it (will be replaced with a new card at the start of next turn)
-        for (int i = 0; i < 3; i ++){
+        for (int i = 0; i < 2; i ++){
             if (ownedCards.get(i) == cardPlayed) {
                 usedCard = i; //set used card index to that of the played card
                 ownedCards.get(i).dispose();

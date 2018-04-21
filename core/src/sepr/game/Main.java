@@ -135,7 +135,7 @@ public class Main extends Game implements ApplicationListener {
 	}
 
 	public void SaveGame(){
-        this.saveLoadManager.SaveByID(this.saveLoadManager.GetCurrentSaveID()); // TODO get next id/current id
+        this.saveLoadManager.SaveByID(this.saveLoadManager.GetCurrentSaveID());
     }
 
     public void LoadGame(){

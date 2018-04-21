@@ -110,6 +110,7 @@ public abstract class Phase extends Stage {
         subSubTable.row();
         subSubTable.add(bottomBarRightPart).expandX().fillX().height(60);
         subTable.add(subSubTable).bottom().expandX().fillX();//.height(60);
+
         //================code by charlie==============================
 
         table.row();
