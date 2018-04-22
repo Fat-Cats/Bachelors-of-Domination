@@ -60,6 +60,7 @@ public class JSONifier {
             gameState.mapState.sectorStates[i].ownerId = (int)(long)(Long)sector.get("OwnerID"); // Get Sector's Owner's ID
             gameState.mapState.sectorStates[i].displayName = (String)sector.get("DisplayName"); // Get Sector's display name
             gameState.mapState.sectorStates[i].unitsInSector = (int)(long)(Long)sector.get("UnitsInSector"); // Get the number of units in the Sector
+            gameState.mapState.sectorStates[i].guardsInSector = (int)(long)(Long)sector.get("GuardsInSector"); // Get the number of guards in the Sector
             gameState.mapState.sectorStates[i].reinforcementsProvided = (int)(long)(Long)sector.get("ReinforcementsProvided"); // Get the number of reinforcements provided
             gameState.mapState.sectorStates[i].college = (String)sector.get("College"); // Get the Sector's college
             gameState.mapState.sectorStates[i].texturePath = (String)sector.get("TexturePath"); // Get the Sector's texture filepath
@@ -100,6 +101,7 @@ public class JSONifier {
             gameState.playerStates[k].collegeName = GameSetupScreen.CollegeName.fromString((String)player.get("CollegeName")); // Get Player's college name
             gameState.playerStates[k].playerName = (String)player.get("PlayerName"); // Get Player's name
             gameState.playerStates[k].troopsToAllocate = (int)(long)(Long)player.get("TroopsToAllocate"); // Get the troops that the Player has left to allocate
+            gameState.playerStates[k].guardsToAllocate = (int)(long)(Long)player.get("GuardsToAllocate"); // Get the guards that the Player has left to allocate
             JSONObject colour = (JSONObject)player.get("SectorColour"); // Get the Player's Sector colour
             gameState.playerStates[k].sectorColour = new Color((float)(double)(Double)colour.get("R"),(float)(double)(Double)colour.get("G"),(float)(double)(Double)colour.get("B"),(float)(double)(Double)colour.get("A")); // Read Sector colour into a new colour object
             gameState.playerStates[k].playerType = PlayerType.fromString((String)player.get("PlayerType")); // Get the Player's type
@@ -145,6 +147,7 @@ public class JSONifier {
             sectorState.put("OwnerID", sector.ownerId); // Store the Sector's Owner's ID
             sectorState.put("DisplayName", sector.displayName); // Store the Sector's display name
             sectorState.put("UnitsInSector", sector.unitsInSector); // Store the number of units in the Sector
+            sectorState.put("GuardsInSector", sector.guardsInSector); // Store the number of guards in the Sector ##BY THOMAS
             sectorState.put("ReinforcementsProvided", sector.reinforcementsProvided); // Store the number of reinforcements provided to the sector
             sectorState.put("College", sector.college); // Store the college that the Sector belongs to
             sectorState.put("TexturePath", sector.texturePath); // Store the path to the Sector's texture
@@ -180,6 +183,7 @@ public class JSONifier {
             playerState.put("CollegeName", player.collegeName.getCollegeName()); // Store Player college name
             playerState.put("PlayerName", player.playerName); // Store Player name
             playerState.put("TroopsToAllocate", player.troopsToAllocate); // Store the number of troops left to allocate
+            playerState.put("GuardsToAllocate", player.guardsToAllocate); // Store the number of guards left to allocate ##BY THOMAS
             playerState.put("OwnsPVC", player.ownsPVC); // Store whether the Player owns the OVC
 
             JSONObject colour = new JSONObject(); // Store the Player's colour

@@ -45,6 +45,7 @@ public class GameState {
         public GameSetupScreen.CollegeName collegeName; // The college the player repreents
         public String playerName; // The name of the player
         public int troopsToAllocate; // Number of troops to allocate
+        public int guardsToAllocate; //Number of guards to allocate ##BY THOMAS
         public Color sectorColour; // The colour to use for the player's sectors
         public PlayerType playerType; // The player's type
         public boolean ownsPVC; // Whether the player owns the PVC
@@ -63,10 +64,7 @@ public class GameState {
         public int ownerId; // Player ID of the owning player
         public String displayName; // Name of the sector
         public int unitsInSector; // Number of units in the sector
-
-        //===========code by charlie===========
-        public int guardsInSector; //Number of guards in the sector
-        //===========code by charlie===========
+        public int guardsInSector; // Number of guards in the sector ##BY THOMAS
 
 
         public int reinforcementsProvided; // Number of reinforcements added to the sector

@@ -138,7 +138,7 @@ public class SaveLoadManager {
         HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 
         for (GameState.PlayerState player : playerStates){
-            players.put(player.hashMapPosition, new Player(player.id, player.collegeName, new Color(player.sectorColour.r, player.sectorColour.g, player.sectorColour.b, player.sectorColour.a), player.playerType, player.playerName, player.troopsToAllocate, player.ownsPVC));
+            players.put(player.hashMapPosition, new Player(player.id, player.collegeName, new Color(player.sectorColour.r, player.sectorColour.g, player.sectorColour.b, player.sectorColour.a), player.playerType, player.playerName, player.troopsToAllocate, player.guardsToAllocate, player.ownsPVC));
         }
 
         return players;
@@ -165,9 +165,9 @@ public class SaveLoadManager {
             }
 
             if (test) {
-                sectors.put(sector.hashMapPosition, new Sector(sector.id, sector.ownerId, sector.fileName, sector.texturePath, map, sector.displayName, sector.unitsInSector, sector.reinforcementsProvided, sector.college, sector.neutral, sector.adjacentSectorIds, sector.sectorCentreX, sector.sectorCentreY, sector.decor, sector.allocated, color, test));
+                sectors.put(sector.hashMapPosition, new Sector(sector.id, sector.ownerId, sector.fileName, sector.texturePath, map, sector.displayName, sector.unitsInSector, sector.guardsInSector, sector.reinforcementsProvided, sector.college, sector.neutral, sector.adjacentSectorIds, sector.sectorCentreX, sector.sectorCentreY, sector.decor, sector.allocated, color, test));
             }else{
-                sectors.put(sector.hashMapPosition, new Sector(sector.id, sector.ownerId, sector.fileName, sector.texturePath, map, sector.displayName, sector.unitsInSector, sector.reinforcementsProvided, sector.college, sector.neutral, sector.adjacentSectorIds, sector.sectorCentreX, sector.sectorCentreY, sector.decor, sector.allocated, color));
+                sectors.put(sector.hashMapPosition, new Sector(sector.id, sector.ownerId, sector.fileName, sector.texturePath, map, sector.displayName, sector.unitsInSector, sector.guardsInSector, sector.reinforcementsProvided, sector.college, sector.neutral, sector.adjacentSectorIds, sector.sectorCentreX, sector.sectorCentreY, sector.decor, sector.allocated, color));
             }
         }
 
@@ -285,6 +285,7 @@ public class SaveLoadManager {
             playerState.collegeName = value.getCollegeName(); // Store the Player's college
             playerState.playerName = value.getPlayerName(); // Store the Player's name
             playerState.troopsToAllocate = value.getTroopsToAllocate(); // Store the number of troops left to allocate
+            playerState.guardsToAllocate = value.getGuardsToAllocate(); // Store the number of guards left to allocate ##BY THOMAS
             playerState.sectorColour = value.getSectorColour(); // Store the Player's Sector's colour
             playerState.playerType = value.getPlayerType(); // Store the Player's type
             playerState.ownsPVC = value.getOwnsPVC(); // Store whether the Player owns the PVC

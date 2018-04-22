@@ -115,6 +115,7 @@ public class Map {
         Pixmap sectorPixmap = new Pixmap(Gdx.files.internal("mapData/" + sectorData[1]));
         String displayName = sectorData[2];
         int unitsInSector = 10 + random.nextInt(15);
+        int guardsInSector = 2;
         int reinforcementsProvided = Integer.parseInt(sectorData[4]);
         String college = sectorData[5];
         boolean neutral = Boolean.parseBoolean(sectorData[6]);
@@ -123,7 +124,7 @@ public class Map {
         int sectorY = Integer.parseInt(sectorData[9]);
         boolean decor = Boolean.parseBoolean(sectorData[10]);
 
-        return new Sector(sectorId, ownerId, filename, sectorTexture, texturePath, sectorPixmap, displayName, unitsInSector, reinforcementsProvided, college, neutral, adjacentSectors, sectorX, sectorY, decor);
+        return new Sector(sectorId, ownerId, filename, sectorTexture, texturePath, sectorPixmap, displayName, unitsInSector, guardsInSector, reinforcementsProvided, college, neutral, adjacentSectors, sectorX, sectorY, decor);
     }
 
     /**

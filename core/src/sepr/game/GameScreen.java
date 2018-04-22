@@ -570,6 +570,7 @@ public class GameScreen implements Screen, InputProcessor{
         }
         if (keycode == Input.Keys.S) {
             this.main.SaveGame();
+            DialogFactory.basicDialogBox("Saved!", "Your game has been saved!", phases.get(currentPhase)); // Inform player of the save
         }
         if (keycode == Input.Keys.L) {
             this.main.LoadGame();

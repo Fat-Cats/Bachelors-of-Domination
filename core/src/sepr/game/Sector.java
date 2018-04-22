@@ -46,11 +46,12 @@ public class Sector implements ApplicationListener {
      * @param sectorCentreY ycoord of sector centre
      * @param decor false if a sector is accessible to a player and true if sector is decorative
      */
-    public Sector(int id, int ownerId, String fileName, Texture sectorTexture, String texturePath, Pixmap sectorPixmap, String displayName, int unitsInSector, int reinforcementsProvided, String college, boolean neutral, int[] adjacentSectorIds, int sectorCentreX, int sectorCentreY, boolean decor) {
+    public Sector(int id, int ownerId, String fileName, Texture sectorTexture, String texturePath, Pixmap sectorPixmap, String displayName, int unitsInSector, int guardsInSector, int reinforcementsProvided, String college, boolean neutral, int[] adjacentSectorIds, int sectorCentreX, int sectorCentreY, boolean decor) {
         this.id = id;
         this.ownerId = ownerId;
         this.displayName = displayName;
         this.unitsInSector = unitsInSector;
+        this.guardsInSector = guardsInSector;
         this.reinforcementsProvided = reinforcementsProvided;
         this.college = college;
         this.neutral = neutral;
@@ -65,8 +66,9 @@ public class Sector implements ApplicationListener {
         this.allocated = false;
     }
 
-    public Sector(int id, int ownerId, String fileName, String texturePath, Pixmap sectorPixmap, String displayName, int unitsInSector, int reinforcementsProvided, String college, boolean neutral, int[] adjacentSectorIds, int sectorCentreX, int sectorCentreY, boolean decor, boolean allocated, Color color) {
-        this(id, ownerId, fileName, new Texture(texturePath), texturePath, sectorPixmap, displayName, unitsInSector, reinforcementsProvided, college, neutral, adjacentSectorIds, sectorCentreX, sectorCentreY, decor);
+    //Used for loading
+    public Sector(int id, int ownerId, String fileName, String texturePath, Pixmap sectorPixmap, String displayName, int unitsInSector, int guardsInSector, int reinforcementsProvided, String college, boolean neutral, int[] adjacentSectorIds, int sectorCentreX, int sectorCentreY, boolean decor, boolean allocated, Color color) {
+        this(id, ownerId, fileName, new Texture(texturePath), texturePath, sectorPixmap, displayName, unitsInSector, guardsInSector, reinforcementsProvided, college, neutral, adjacentSectorIds, sectorCentreX, sectorCentreY, decor);
         
         this.allocated = allocated;
         this.sectorCentreY = sectorCentreY;
@@ -76,7 +78,8 @@ public class Sector implements ApplicationListener {
         }
     }
 
-    public Sector(int id, int ownerId, String fileName, String texturePath, Pixmap sectorPixmap, String displayName, int unitsInSector, int reinforcementsProvided, String college, boolean neutral, int[] adjacentSectorIds, int sectorCentreX, int sectorCentreY, boolean decor, boolean allocated, Color color, boolean test){
+    //Used for loading IF test
+    public Sector(int id, int ownerId, String fileName, String texturePath, Pixmap sectorPixmap, String displayName, int unitsInSector, int guardsInSector, int reinforcementsProvided, String college, boolean neutral, int[] adjacentSectorIds, int sectorCentreX, int sectorCentreY, boolean decor, boolean allocated, Color color, boolean test){
         HeadlessApplicationConfiguration conf = new HeadlessApplicationConfiguration();
 
         new HeadlessApplication(this, conf);
@@ -85,6 +88,7 @@ public class Sector implements ApplicationListener {
         this.ownerId = ownerId;
         this.displayName = displayName;
         this.unitsInSector = unitsInSector;
+        this.guardsInSector = guardsInSector;
         this.reinforcementsProvided = reinforcementsProvided;
         this.college = college;
         this.neutral = neutral;

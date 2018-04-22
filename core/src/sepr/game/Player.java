@@ -56,10 +56,12 @@ public class Player {
 
     }
 
-    public Player(int id, GameSetupScreen.CollegeName collegeName, Color sectorColour, PlayerType playerType, String playerName, int troopsToAllocate, boolean ownsPVC){
+    //Used for Loading
+    public Player(int id, GameSetupScreen.CollegeName collegeName, Color sectorColour, PlayerType playerType, String playerName, int troopsToAllocate, int guardsToAllocate, boolean ownsPVC){
         this(id, collegeName, sectorColour, playerType, playerName);
 
         this.troopsToAllocate = troopsToAllocate;
+        this.guardsToAllocate = guardsToAllocate; //BY THOMAS
         this.setOwnsPVC(ownsPVC);
     }
 
