@@ -107,12 +107,20 @@ public class JSONifier {
             gameState.playerStates[k].playerType = PlayerType.fromString((String)player.get("PlayerType")); // Get the Player's type
             gameState.playerStates[k].ownsPVC = (boolean)(Boolean)player.get("OwnsPVC"); // Get whether the Player owns the PVC
 
+            //============code by charlie=================
+            gameState.playerStates[k].cardManager = (String)player.get("cards");
+            //============code by charlie=================
+
             k++;
         }
 
         gameState.turnTimerEnabled = (Boolean)this.saveState.get("TurnTimerEnabled"); // Get whether the turn timer is enabled
         gameState.maxTurnTime = (int)(long)(Long)this.saveState.get("MaxTurnTime"); // Get the maximum turn time
         gameState.turnTimeStart = (Long)this.saveState.get("TurnTimeStart"); // Get the start time of the turn
+
+        //============code by charlie=================
+        gameState.paiNeutral = (boolean)(Boolean)this.saveState.get("PaiNeutral");
+        //============code by charlie=================
 
         gameState.turnOrder = new ArrayList<Integer>(); // Turn order
         JSONArray turnOrderJSON = (JSONArray)this.saveState.get("TurnOrder"); // Get the turn order JSONArray
@@ -186,6 +194,10 @@ public class JSONifier {
             playerState.put("GuardsToAllocate", player.guardsToAllocate); // Store the number of guards left to allocate ##BY THOMAS
             playerState.put("OwnsPVC", player.ownsPVC); // Store whether the Player owns the OVC
 
+            //=======code by charlie============
+            playerState.put("cards", player.cardManager); // Store PlayingCardManager encoding for each player
+            //=======code by charlie============
+
             JSONObject colour = new JSONObject(); // Store the Player's colour
             colour.put("R", player.sectorColour.r);
             colour.put("G", player.sectorColour.g);
@@ -203,6 +215,10 @@ public class JSONifier {
         gameStateObject.put("TurnTimerEnabled", this.state.turnTimerEnabled); // Store whether the turn timer is enabled
         gameStateObject.put("MaxTurnTime", this.state.maxTurnTime); // Store the max turn time
         gameStateObject.put("TurnTimeStart", this.state.turnTimeStart); // Store the start time of the turn
+
+        //=======code by charlie============
+        gameStateObject.put("PaiNeutral", this.state.paiNeutral); // Store whether pai effect is active
+        //=======code by charlie============
 
         JSONArray turnOrder = new JSONArray(); // Store the order of player turns
         for (int i = 0; i < this.state.turnOrder.size(); i++){

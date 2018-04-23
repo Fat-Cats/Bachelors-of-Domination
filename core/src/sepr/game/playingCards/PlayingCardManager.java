@@ -9,22 +9,25 @@ import sepr.game.Player;
 
 import java.util.*;
 
-//PlayingCardManagers keep track of what 2 cards each player has, as well as which cards are used per turn (if any),
+//PlayingCardManager's keep track of what 2 cards each player has, as well as which cards are used per turn (if any),
 //the class extends table so that it can be added to a stage and be left to handle its own drawing positions and scales
 public class PlayingCardManager extends Table {
 
     //reference to the stage so that dialogue messages can be generated
     public Stage stage;
+
     //this list stores the cards currently owned by this cardManager's owner
     private ArrayList<PlayingCard> ownedCards;
+
     //used to ensure that a player only activates one card per turn
     //-1 indicates that no card has been played yet, otherwise stores the index of 'ownedCards' pointing to the used card
     //this value is reset at the end of each players turn
     private int usedCard;
+
     //reference to the player that owns this playingCardManager
     private Player owner;
 
-    //if instantiated with only an owner parameter, each player is assigned 2 random playing cards
+    //if instantiated with only an owner parameter, each player is assigned 2 random playing cardsa
     public PlayingCardManager(Player owner){
 
         //set reference to owner, and set usedCard to -1 (indicating that no card has been played yet)
@@ -40,21 +43,40 @@ public class PlayingCardManager extends Table {
         setupCardManagerWidget();
     }
 
-    //if a list of card types are specified in parameters, create a manager with those card types (used in loading)
-    public PlayingCardManager(Player owner, ArrayList<PlayingCard.cardType> preSelectedCards) {
-        //set reference to owner, and set usedCard to -1 (indicating that no card has been played yet)
+    //save/load functionality saves owned cards as a string of integers encoding different card types. If a
+    //PlayingCardManager is instantiated with specified card types (occurs during loading) create a PlayingCardManager
+    //with those card types
+    public PlayingCardManager(Player owner, String preSelectedCards) {
+        //set reference to owner
         this.owner = owner;
-        this.usedCard = -1;
+        //assume at the start that no cards have been played
+        usedCard = -1;
+        //convert string representation to array of strings
+        ArrayList<String> loadedCards = new ArrayList<String>(Arrays.asList(preSelectedCards.split(",")));
 
         //only 2 cards are allowed at a time
-        if (preSelectedCards.size() == 2) {
+        if (loadedCards.size() == 2) {
             //assign 2 cards, of the types specified by "preSelectedCards"
             this.ownedCards = new ArrayList<PlayingCard>();
-            for (PlayingCard.cardType card : preSelectedCards) {
-                this.ownedCards.add(new PlayingCard(this, card));
+
+            //loop through loadedCard values
+            for (int i = 0; i < 2; i++) {
+
+                //convert string representation to integer
+                Integer cardType = Integer.parseInt( loadedCards.get(i) );
+
+                if (cardType < 0) { //if a negative number has been encoded, it represents (usedCard - 1)
+                    //set usedCard and create and arbitrary type card
+                    usedCard = -(cardType + 1);
+                    this.ownedCards.add(new PlayingCard(this, 0 ));
+                }
+                else {
+                    //create PlayingCard of specified type
+                    this.ownedCards.add(new PlayingCard(this, cardType ));
+                }
             }
         }
-        else {
+        else { //if more than 2 cards are specified, throw an error
             throw new RuntimeException("incorrect number of cards specified");
         }
 
@@ -73,12 +95,12 @@ public class PlayingCardManager extends Table {
             if (i == usedCard) { //if a card has been used, add an empty actor in place of a card image (so it is not drawn)
                 cardActors.add(new Actor());
             }
-            else {
+            else { //if a card has not been used, use it's image
                 cardActors.add(ownedCards.get(i).thisCardImage);
             }
         }
 
-        //if an empty actor has been added, set its dimensions equal to the next cards dimensions
+        //if an empty actor has been added, set its dimensions equal to the next, real, card's dimensions
         if (usedCard != -1) {
             Actor notNullCard = cardActors.get((usedCard + 1) % 2);
             cardActors.get(usedCard).setBounds(0, 0, notNullCard.getWidth(), notNullCard.getHeight());
@@ -92,12 +114,9 @@ public class PlayingCardManager extends Table {
         //add card images to table and define padding
         float width = this.getWidth();
 
+        //add card actors to this table, which are drawn later
         this.add(cardActors.get(0));
         this.add(cardActors.get(1));
-
-        //this.add(cardActors.get(0)).padLeft(width/5);
-        //this.add(cardActors.get(1)).padRight(50).padLeft(50);
-        //this.add(cardActors.get(2)).padRight(width/5);
 
     }
 
@@ -112,7 +131,7 @@ public class PlayingCardManager extends Table {
             return;
         }
 
-        //activate card' ability
+        //activate cards ability
         cardPlayed.activateCard(this.owner);
 
         //search for used card and dispose it (will be replaced with a new card at the start of next turn)
@@ -132,6 +151,9 @@ public class PlayingCardManager extends Table {
 
     //called at the end of each players turn to replenish used cards
     public void assignNewCards() {
+        System.out.println(owner.getPlayerName());
+        System.out.println(Integer.toString(usedCard));
+
         if (usedCard != -1) { //if a card has been used
             ownedCards.set(usedCard, new PlayingCard(this));
             usedCard = -1; //set used card to zero so another card can be played next turn
@@ -142,6 +164,30 @@ public class PlayingCardManager extends Table {
             //reformat table so it is drawn properly
             this.setupCardManagerWidget();
         }
+    }
+
+    //called by save function to represent held cards as a string of integers
+    public String getMyCardsEncoded() {
+        //string used to encode used cards
+        String encoding = "";
+
+        //loop through all owned cards and append them to the string representation
+        for (int i = 0; i < 2; i++) {
+            //if a card has been used, instead place the value of used (-(card + 1)) where that card would normally be encoded
+            //in the string, separated by a comma
+            if (i == usedCard) {
+                encoding += Integer.toString(-(usedCard + 1))  + ",";
+            }
+            else { //else, add that card to the encoded string, separated by a comma
+                //encode card type by the integer stored in each card type class
+                encoding += Integer.toString(ownedCards.get(i).thisCardType.cardEncode) + ",";
+            }
+        }
+
+        //remove trailing comma
+        encoding = encoding.substring(0, encoding.length() - 1);
+
+        return encoding;
     }
 
     //when finished using this manager, dispose all necessary textures belonging to owned cards

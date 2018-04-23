@@ -28,6 +28,10 @@ public class GameState {
     public List<Integer> turnOrder; // The order in which players take their turn
     public int currentPlayerPointer; // The player currently taking their turn
 
+    //======code by charlie=============
+    public boolean paiNeutral; //whether or not PAITHENEUTRALISER card's effect is active
+    //======code by charlie=============
+
     /**
      * Class to store the map in a way that can be written to JSON later
      */
@@ -51,7 +55,7 @@ public class GameState {
         public boolean ownsPVC; // Whether the player owns the PVC
 
         //======code by charlie=============
-        public PlayingCardManager cardManager; //cards owned by this player
+        public String cardManager; //string encoding of cards owned by this player
         //======code by charlie=============
     }
 

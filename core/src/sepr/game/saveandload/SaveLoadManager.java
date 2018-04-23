@@ -12,6 +12,7 @@ import sepr.game.Main;
 import sepr.game.Map;
 import sepr.game.Player;
 import sepr.game.Sector;
+import sepr.game.playingCards.PlayingCardManager;
 
 import java.io.*;
 import java.util.HashMap;
@@ -138,7 +139,7 @@ public class SaveLoadManager {
         HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 
         for (GameState.PlayerState player : playerStates){
-            players.put(player.hashMapPosition, new Player(player.id, player.collegeName, new Color(player.sectorColour.r, player.sectorColour.g, player.sectorColour.b, player.sectorColour.a), player.playerType, player.playerName, player.troopsToAllocate, player.guardsToAllocate, player.ownsPVC));
+            players.put(player.hashMapPosition, new Player(player.id, player.collegeName, new Color(player.sectorColour.r, player.sectorColour.g, player.sectorColour.b, player.sectorColour.a), player.playerType, player.playerName, player.troopsToAllocate, player.guardsToAllocate, player.ownsPVC, player.cardManager));
         }
 
         return players;
@@ -193,6 +194,8 @@ public class SaveLoadManager {
         for (Integer i : players.keySet()) {
             players.get(i).theGameMap = loadedMap;
         }
+
+        GameScreen.paiNeutralEnabled = loadedState.paiNeutral;
         //=============================code by charlie=============================
 
         return true;
@@ -230,6 +233,10 @@ public class SaveLoadManager {
         gameState.turnTimeStart = this.gameScreen.getTurnTimeStart(); // Store the start time of the current turn
         gameState.turnOrder = this.gameScreen.getTurnOrder(); // Store the turn order
         gameState.currentPlayerPointer = this.gameScreen.getCurrentPlayerPointer(); // Store the pointer to the current player
+
+        //===========code by charlie===========
+        gameState.paiNeutral = GameScreen.paiNeutralEnabled; //store state of pai the neutraliser (whether or not active)
+        //===========code by charlie===========
 
         GameState.MapState mapState = gameState.new MapState(); // Create a new MapState
 
@@ -290,7 +297,7 @@ public class SaveLoadManager {
             playerState.playerType = value.getPlayerType(); // Store the Player's type
             playerState.ownsPVC = value.getOwnsPVC(); // Store whether the Player owns the PVC
             //==========code by charlie=================
-            playerState.cardManager = value.myCards;
+            playerState.cardManager = value.myCards.getMyCardsEncoded();
             //==========code by charlie=================
             gameState.playerStates[i] = playerState;
             i++;
