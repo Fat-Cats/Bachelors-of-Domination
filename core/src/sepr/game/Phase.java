@@ -39,7 +39,6 @@ public abstract class Phase extends Stage {
     private Label playerNameLabel; // displays the name of the current player in their college's colour colour
     private Label reinforcementLabel; // label showing how many troops the player has to allocate in their next reinforcement phase
     private Label guardReinforcementLabel; //label showing how many guards the player has to allocate in their next reinforcement phase, Thomas
-    private Label turnTimerLabel; // displays how much time the player has left
     private Image collegeLogo; // ui component for displaying the logo of the current players college
 
     private static Texture gameHUDBottomBarLeftPartTexture;
@@ -149,7 +148,6 @@ public abstract class Phase extends Stage {
         playerNameLabel = new Label("", playerNameStyle);
         reinforcementLabel = new Label("", style);
         guardReinforcementLabel = new Label("", style); //added by Thomas
-        turnTimerLabel = new Label("Timer: DISABLED", style);
         collegeLogo = new Image(WidgetFactory.genCollegeLogoDrawable(GameSetupScreen.CollegeName.UNI_OF_YORK));
 
         Table table = new Table();
@@ -163,7 +161,7 @@ public abstract class Phase extends Stage {
         subTable.row();
         subTable.add(reinforcementLabel).colspan(2);
         subTable.row();
-        subTable.add(turnTimerLabel).colspan(2);
+        subTable.add().colspan(2);
 
         table.add(subTable);
 
@@ -204,14 +202,6 @@ public abstract class Phase extends Stage {
         updateGuardReinforcementLabel(); //added by Thomas
     }
 
-    /**
-     * updates the text of the turn timer label
-     *
-     * @param timeRemaining time remaining of turn in seconds
-     */
-    void setTimerValue(int timeRemaining) {
-        turnTimerLabel.setText(new StringBuilder("Turn Timer: " + timeRemaining));
-    }
 
     /**
      * updates the display of the number of troops the current player will have in their next reinforcement phase

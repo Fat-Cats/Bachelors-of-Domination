@@ -244,12 +244,6 @@ public class GameSetupScreen implements Screen{
 
         neutralPlayerSwitch = WidgetFactory.genOnOffSwitch();
 
-        // turn timer
-        Label turnTimerLabel = WidgetFactory.genMenuLabel("TURN TIMER");
-        turnTimerLabel.setAlignment(0, 0);
-
-        turnTimerSwitch = WidgetFactory.genOnOffSwitch();
-
         // Add components to table
         Table switchTable = new Table();
         switchTable.setDebug(false);
@@ -262,9 +256,9 @@ public class GameSetupScreen implements Screen{
         switchTable.row().padTop(20).padBottom(20);
 
         switchTable.left();
-        switchTable.add(turnTimerLabel).height(60).width(420);
+        switchTable.add().height(60).width(420);
         switchTable.right();
-        switchTable.add(turnTimerSwitch).padLeft(50);
+        switchTable.add().padLeft(50);
 
         return switchTable;
     }
@@ -486,7 +480,7 @@ public class GameSetupScreen implements Screen{
         int MAX_TURN_TIME = 120;
         Audio.disposeMusic("sound/IntroMusic/introMusic.mp3");
         Audio.loadMusic("sound/Gameplay Music/wind.mp3"); //loads and plays the gamePlay music
-        main.setGameScreen(x, turnTimerSwitch.isChecked(), MAX_TURN_TIME, neutralPlayerSwitch.isChecked());
+        main.setGameScreen(x, neutralPlayerSwitch.isChecked());
     }
 
     /**

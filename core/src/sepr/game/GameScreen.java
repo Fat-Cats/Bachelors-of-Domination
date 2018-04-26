@@ -51,11 +51,6 @@ public class GameScreen implements Screen, InputProcessor{
 
     private HashMap<Integer, Boolean> keysDown; // mapping from key, (Input.Keys), to whether it has been pressed down
 
-    // timer settings
-    private boolean turnTimerEnabled;
-    private int maxTurnTime;
-    private long turnTimeStart;
-
     private List<Integer> turnOrder; // array of player ids in order of players' turns;
     private int currentPlayerPointer; // index of current player in turnOrder list
     private int previousPlayerPointer; // index of the previous player in turnOrder list
@@ -100,7 +95,7 @@ public class GameScreen implements Screen, InputProcessor{
         this.random = new Random();
     }
 
-    public GameScreen(Main main, TurnPhaseType currentPhase, Map map, HashMap<Integer, Player> players, boolean turnTimerEnabled, int maxTurnTime, long turnTimeStart, List<Integer> turnOrder, int currentPlayerPointer){
+    public GameScreen(Main main, TurnPhaseType currentPhase, Map map, HashMap<Integer, Player> players, List<Integer> turnOrder, int currentPlayerPointer){
         this(main);
 
         setUpPhases();
@@ -111,9 +106,6 @@ public class GameScreen implements Screen, InputProcessor{
 
         this.map = map;
         this.players = players;
-        this.turnTimerEnabled = turnTimerEnabled;
-        this.maxTurnTime = maxTurnTime;
-        this.turnTimeStart = turnTimeStart;
         this.turnOrder = turnOrder;
         this.currentPlayerPointer = currentPlayerPointer;
         this.phases.get(this.currentPhase).enterPhase(getCurrentPlayer());
@@ -126,10 +118,8 @@ public class GameScreen implements Screen, InputProcessor{
      * start game must be called before the game is ready to be played
      *
      * @param players HashMap of the players in this game
-     * @param turnTimerEnabled should players turns be limited
-     * @param maxTurnTime time elapsed in cthis.phases = phases;urrent turn, irrelevant if turn timer not enabled
      */
-    public void setupGame(HashMap<Integer, Player> players, boolean turnTimerEnabled, int maxTurnTime, boolean allocateNeutralPlayer) {
+    public void setupGame(HashMap<Integer, Player> players, boolean allocateNeutralPlayer) {
 
         Audio.loadSounds(); //loads the sounds into memory
 
@@ -144,8 +134,6 @@ public class GameScreen implements Screen, InputProcessor{
 
         this.currentPlayerPointer = 0; // set the current player to the player in the first position of the turnOrder list
 
-        this.turnTimerEnabled = turnTimerEnabled;
-        this.maxTurnTime = maxTurnTime;
         this.ProViceChancellor = new PVC((float)1.00,this);
         this.map = new Map(this.players, allocateNeutralPlayer, ProViceChancellor); // setup the game map and allocate the sectors
 
@@ -170,7 +158,7 @@ public class GameScreen implements Screen, InputProcessor{
     }
 
     /**
-     * called once game is setup to enter the first phase of the game; centre the game camera and start the turn timer
+     * called once game is setup to enter the first phase of the game; centre the game camera
      *
      * @throws RuntimeException if this is called before the game is setup, i.e. setupGame has not been called before this
      */
@@ -178,7 +166,6 @@ public class GameScreen implements Screen, InputProcessor{
         if (!gameSetup) {
             throw new RuntimeException("Cannot start game before it is setup");
         }
-        this.turnTimeStart = System.currentTimeMillis(); // set turn start time to current time
         this.phases.get(currentPhase).enterPhase(getCurrentPlayer());
         resetCameraPosition();
     }
@@ -200,15 +187,6 @@ public class GameScreen implements Screen, InputProcessor{
      */
     private boolean isGameOver() {
         return turnOrder.size() <= 1; // game is over if only one player is in the turn order
-    }
-
-    /**
-     * gets in seconds the amount of time remaining of the current player's turn
-     *
-     * @return time remaining in turn in seconds
-     */
-    private int getTurnTimeRemaining(){
-        return maxTurnTime - (int)((System.currentTimeMillis() - turnTimeStart) / 1000);
     }
 
     /**
@@ -306,9 +284,6 @@ public class GameScreen implements Screen, InputProcessor{
 
         resetCameraPosition(); // re-centres the camera for the next player
 
-        if (this.turnTimerEnabled) { // if the turn timer is on reset it for the next player
-            this.turnTimeStart = System.currentTimeMillis();
-        }
     }
 
     /**
@@ -482,15 +457,8 @@ public class GameScreen implements Screen, InputProcessor{
 
         gameplayBatch.end(); // stop rendering
 
-        if (this.turnTimerEnabled) { // update the timer display, if it is enabled
-            this.phases.get(currentPhase).setTimerValue(getTurnTimeRemaining());
-        }
         this.phases.get(currentPhase).act(delta); // update the stage of the current phase
         this.phases.get(currentPhase).draw(); // draw the phase UI
-
-        if (this.turnTimerEnabled && (getTurnTimeRemaining() <= 0)) { // goto the next player's turn if the timer is enabled and they have run out of time
-            nextPlayer();
-        }
 
 
     }
@@ -626,18 +594,6 @@ public class GameScreen implements Screen, InputProcessor{
 
     public HashMap<Integer, Player> getPlayers() {
         return players;
-    }
-
-    public boolean isTurnTimerEnabled(){
-        return this.turnTimerEnabled;
-    }
-
-    public int getMaxTurnTime(){
-        return this.maxTurnTime;
-    }
-
-    public long getTurnTimeStart(){
-        return this.turnTimeStart;
     }
 
     public List<Integer> getTurnOrder(){

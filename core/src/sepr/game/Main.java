@@ -61,12 +61,10 @@ public class Main extends Game implements ApplicationListener {
 	 * displays the game screen and starts a game with the passed properties
 	 *
 	 * @param players hashmap of players who should be present in the game
-	 * @param turnTimerEnabled whether or not this game should have a turn timer on
-	 * @param maxTurnTime the maximum time of a turn, in seconds, if the turn tumer is enabled
 	 * @param allocateNeutralPlayer should the neutral player be given sectors to start with
 	 */
-	public void setGameScreen(HashMap<Integer, Player> players, boolean turnTimerEnabled, int maxTurnTime, boolean allocateNeutralPlayer) {
-		gameScreen.setupGame(players, turnTimerEnabled, maxTurnTime, allocateNeutralPlayer);
+	public void setGameScreen(HashMap<Integer, Player> players, boolean allocateNeutralPlayer) {
+		gameScreen.setupGame(players, allocateNeutralPlayer);
 		this.setScreen(gameScreen);
 		gameScreen.startGame();
 	}

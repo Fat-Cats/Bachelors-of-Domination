@@ -186,7 +186,7 @@ public class SaveLoadManager {
 
         Map loadedMap = MapFromMapState(loadedState.mapState, players, sectors);
 
-        this.gameScreen = new GameScreen(this.main, loadedState.currentPhase, loadedMap, players, loadedState.turnTimerEnabled, loadedState.maxTurnTime, loadedState.turnTimeStart, loadedState.turnOrder, loadedState.currentPlayerPointer);
+        this.gameScreen = new GameScreen(this.main, loadedState.currentPhase, loadedMap, players, loadedState.turnOrder, loadedState.currentPlayerPointer);
 
         this.main.setGameScreenFromLoad(this.gameScreen);
 
@@ -228,9 +228,6 @@ public class SaveLoadManager {
         gameState.currentPhase = this.gameScreen.getCurrentPhase(); // Store current phase
         gameState.map = this.gameScreen.getMap(); // Store map
         gameState.players = this.gameScreen.getPlayers(); // Store players
-        gameState.turnTimerEnabled = this.gameScreen.isTurnTimerEnabled(); // Store whether the turn timer is enabled
-        gameState.maxTurnTime = this.gameScreen.getMaxTurnTime(); // Store the maximum turn time
-        gameState.turnTimeStart = this.gameScreen.getTurnTimeStart(); // Store the start time of the current turn
         gameState.turnOrder = this.gameScreen.getTurnOrder(); // Store the turn order
         gameState.currentPlayerPointer = this.gameScreen.getCurrentPlayerPointer(); // Store the pointer to the current player
 
