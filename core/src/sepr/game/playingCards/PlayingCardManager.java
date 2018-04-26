@@ -1,5 +1,6 @@
 package sepr.game.playingCards;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -108,7 +109,8 @@ public class PlayingCardManager extends Table {
 
         //adjust image sizes
         for (int i = 0; i < 2; i++) {
-            cardActors.get(i).setScale(0.46f, 0.46f);
+            //cardActors.get(i).setScale(0.46f, 0.46f);
+            cardActors.get(i).setScale((float)Gdx.graphics.getWidth()/4000f, (float)Gdx.graphics.getWidth()/4000f);
         }
 
         //add card images to table and define padding
@@ -151,8 +153,6 @@ public class PlayingCardManager extends Table {
 
     //called at the end of each players turn to replenish used cards
     public void assignNewCards() {
-        System.out.println(owner.getPlayerName());
-        System.out.println(Integer.toString(usedCard));
 
         if (usedCard != -1) { //if a card has been used
             ownedCards.set(usedCard, new PlayingCard(this));
