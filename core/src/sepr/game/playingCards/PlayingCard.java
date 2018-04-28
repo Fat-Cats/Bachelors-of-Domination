@@ -1,9 +1,11 @@
 //======================================================
 //
-//Fat Cats release of Bachelors of Domination
-//Executable can be found under "Game Executable"
+// Fat Cats release of Bachelors of Domination
+// Executable can be found under "Game Executable"
+// http://www-users.york.ac.uk/~ch1575/documentation
 //
 //======================================================
+
 
 package sepr.game.playingCards;
 
