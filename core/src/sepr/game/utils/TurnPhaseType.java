@@ -1,3 +1,10 @@
+//======================================================
+//
+//Fat Cats release of Bachelors of Domination
+//Executable can be found under "Game Executable"
+//
+//======================================================
+
 package sepr.game.utils;
 
 /**
